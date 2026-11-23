@@ -198,6 +198,7 @@ html.calm .journey-garden{transform:none!important;transition:none!important;wil
 .primary.is-flowing[data-action="next"]::before,.primary.is-flowing[data-action="continue"]::before{animation:button-aurora 1100ms var(--ease-in-out) both}
 .primary.is-flowing[data-action="next"]::after,.primary.is-flowing[data-action="continue"]::after{animation:button-light-pass 1100ms var(--ease-out) both}
 .phone-dock .primary.is-flowing:disabled{opacity:1}
+.paused .primary::before,.paused .primary::after{animation-play-state:paused!important}
 @keyframes button-tide{0%,100%{opacity:.22;transform:translate3d(-15%,0,0)}50%{opacity:.78;transform:translate3d(15%,0,0)}}
 @keyframes button-aurora{0%{opacity:.15;transform:translate3d(-18%,0,0)}32%{opacity:1}72%{opacity:.92}100%{opacity:0;transform:translate3d(18%,0,0)}}
 @keyframes button-light-pass{0%{opacity:0;transform:translate3d(-70%,0,0)}20%{opacity:1}75%{opacity:.75}100%{opacity:0;transform:translate3d(70%,0,0)}}
