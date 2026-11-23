@@ -191,6 +191,18 @@ html.calm .journey-garden{transform:none!important;transition:none!important;wil
 .brand{color:var(--emerald);text-decoration:none;letter-spacing:-.035em}.brand-label{line-height:1.1}.brand:hover{color:var(--forest)}.footer a{text-decoration:none;font-weight:500}.footer a:hover{text-decoration:underline}
 @media(max-width:700px){.brand{font-size:23px;gap:8px;min-width:0}.brand svg{width:27px;flex-shrink:0}.brand-label{max-width:12ch}.header-actions{flex-shrink:0}.footer a{font-size:12px}}
 @media(max-width:360px){.brand{font-size:21px}.brand-label{max-width:10ch}}
+/* Световой перелив на кнопках: двигаются только прозрачные цветовые слои. */
+.primary[data-action="next"]::before,.primary[data-action="continue"]::before{content:'';position:absolute;inset:0 -90%;z-index:-1;pointer-events:none;background:linear-gradient(110deg,#0B3D2E 8%,#185A40 29%,#335F47 44%,#52623A 55%,#1D5D43 70%,#0B3D2E 92%);opacity:0;transform:translate3d(-18%,0,0)}
+.primary[data-action="next"]::after,.primary[data-action="continue"]::after{content:'';position:absolute;inset:-50% -45%;z-index:-1;pointer-events:none;background:linear-gradient(110deg,transparent 35%,#BFE8D012 44%,#D8E86B1C 50%,#FFFFFF12 55%,transparent 64%);opacity:0;transform:translate3d(-70%,0,0)}
+.has-answer .primary[data-action="next"]:not(.is-flowing)::before{animation:button-tide 5.2s var(--ease-in-out) infinite}
+.primary.is-flowing[data-action="next"]::before,.primary.is-flowing[data-action="continue"]::before{animation:button-aurora 1100ms var(--ease-in-out) both}
+.primary.is-flowing[data-action="next"]::after,.primary.is-flowing[data-action="continue"]::after{animation:button-light-pass 1100ms var(--ease-out) both}
+.phone-dock .primary.is-flowing:disabled{opacity:1}
+@keyframes button-tide{0%,100%{opacity:.22;transform:translate3d(-15%,0,0)}50%{opacity:.78;transform:translate3d(15%,0,0)}}
+@keyframes button-aurora{0%{opacity:.15;transform:translate3d(-18%,0,0)}32%{opacity:1}72%{opacity:.92}100%{opacity:0;transform:translate3d(18%,0,0)}}
+@keyframes button-light-pass{0%{opacity:0;transform:translate3d(-70%,0,0)}20%{opacity:1}75%{opacity:.75}100%{opacity:0;transform:translate3d(70%,0,0)}}
+@media(prefers-reduced-motion:reduce){.primary[data-action="next"]::before,.primary[data-action="next"]::after,.primary[data-action="continue"]::before,.primary[data-action="continue"]::after{display:none}}
+html.calm .primary[data-action="next"]::before,html.calm .primary[data-action="next"]::after,html.calm .primary[data-action="continue"]::before,html.calm .primary[data-action="continue"]::after{display:none}
 </style>
 </head>
 <body>
@@ -1573,7 +1585,16 @@ function question(itemIndex=state.item){const q=scales[state.scale],item=q.quest
 function resultPage(){const data=results();return `<section class="screen results" aria-labelledby="screen-title"><div class="result-heading"><div class="eyebrow">Пауза, которая имеет значение</div><h2 id="screen-title" tabindex="-1">Вы уделили себе время.</h2><p>${data.every(r=>r.available)?'Результаты помогут начать разговор с врачом. Сохраните их удобным способом и возьмите с собой на приём.':'Предпросмотр завершён. Баллы недоступны там, где официальный бланк или ключ ещё не подтверждены.'}</p><p class="profile-summary">${esc(profileSummary())}</p><div class="print-date">${esc(reportDate())}</div></div><div class="results-grid">${data.map((r,i)=>`<article class="result-card glass ${r.high?'warm':''} ${r.available?'':'unavailable'}" style="--i:${i}" data-result="${i}"><div class="ring" aria-hidden="true"><svg viewBox="0 0 80 80"><circle class="ring-track" cx="40" cy="40" r="34"/><circle class="ring-value" cx="40" cy="40" r="34" pathLength="100"/></svg><div class="ring-number"><span class="counter">${r.available?'0':'—'}</span><small>${r.available?'из '+formatScore(r.max):'нет балла'}</small></div></div><div><h3>${esc(r.scale)}${r.scale==='HADS'?' · '+esc(r.title):''}</h3><p class="metric">${esc(r.scale==='HADS'?'Диапазон 0–21':r.title)}${r.available?`<span class="sr-only">. ${formatScore(r.total)} из ${formatScore(r.max)} баллов.</span>`:''}</p><p class="interpretation">${esc(r.message)}</p><div class="bar" aria-hidden="true"><div class="bar-fill"></div></div></div></article>`).join('')}</div>${data.some(r=>!r.available)?'<div class="notice">Это демонстрация интерфейса, а не результат клинического скрининга. Неиспользуемые баллы не заменяются нулями.</div>':''}<section class="doctor-summary glass" aria-labelledby="doctor-summary-title"><h3 id="doctor-summary-title">Сводка для врача-психиатра</h3><div class="doctor-summary-text">${esc(buildClinicianSummary(data,state.profile))}</div></section><p class="result-note scoring-note">ASRS-5: простая сумма 0–24 без пороговой интерпретации. HCL-8: взвешенная сумма 0–22,05, порог 9,3.</p><div class="result-actions"><button class="button primary" data-action="copy">Скопировать результат ${arrow}</button><button class="button secondary" data-action="print">Скачать PDF</button><a class="button secondary" id="email-link" href="${esc(emailHref())}" style="text-decoration:none">Отправить на почту</a></div><div class="copy-panel glass" id="copy-panel" hidden><label for="manual-copy">Автоматическое копирование недоступно. Выделите текст и скопируйте вручную.</label><textarea id="manual-copy" readonly></textarea></div><p class="result-note">Результаты опросников не являются диагнозом. Баллы отражают ответы в рамках конкретной шкалы. Повышенный результат — повод обсудить состояние с врачом; результат ниже порога не исключает трудностей. BIS-brief показывает только сумму, без оценки «норма / повышенный риск».</p><p class="result-note" style="margin-top:10px">«Скачать PDF» открывает окно печати: выберите «Сохранить как PDF». Почта откроется в вашем почтовом приложении; отправку нужно подтвердить в нём.</p><div class="restart"><button class="text-button" data-action="restart"><span>Пройти заново</span></button><div class="restart-confirm glass" id="restart-confirm" hidden>Начать заново? Текущие ответы будут удалены.<div><button class="button secondary" data-action="cancel-restart">Остаться</button><button class="button primary" data-action="confirm-restart">Начать заново</button></div></div></div></section>`}
 // Переходы ограничены содержимым. Листва, свет и стекло не пересоздаются.
 const transitionAnimations=new Set(),questionHeightCache=new Map();
-let lastSelectionAt=-Infinity;
+let lastSelectionAt=-Infinity,lastActionGlowAt=-Infinity;
+const advanceTimers=new WeakMap();
+function illuminateAdvance(button){
+  if(!button||reduce()||document.hidden)return;
+  lastActionGlowAt=performance.now();
+  clearTimeout(advanceTimers.get(button));
+  if(button.classList.contains('is-flowing')){button.classList.remove('is-flowing');void button.offsetWidth;}
+  button.classList.add('is-flowing');
+  advanceTimers.set(button,setTimeout(()=>{button.classList.remove('is-flowing');advanceTimers.delete(button)},1100));
+}
 const phoneLayout=matchMedia('(max-width:1024px) and (pointer:coarse)');
 function syncPhoneDock(){
  const visible=phoneLayout.matches&&state.screen==='question',dock=document.getElementById('phone-dock');
@@ -1586,7 +1607,7 @@ function syncPhoneDock(){
 }
 phoneLayout.addEventListener('change',()=>{syncPhoneDock();questionHeightCache.clear();if(state.screen==='question'&&!state.busy)stabilizeQuestion()});
 // Тихая пауза после выбора и разнесённое появление текста: стекло остаётся неподвижным.
-const MOTION={feedbackHold:700,out:600,in:1320,answer:1100,overlap:410,stagger:45,easing:'cubic-bezier(.4,0,.2,1)'};
+const MOTION={feedbackHold:700,pressHold:320,out:600,in:1320,answer:1100,overlap:410,stagger:45,easing:'cubic-bezier(.4,0,.2,1)'};
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function screenMarkup(){return state.screen==='welcome'?welcome():state.screen==='profile'?profileScreen():state.screen==='breath'?breath():state.screen==='question'?question():resultPage()}
 function announceScreen(){
@@ -1666,7 +1687,11 @@ async function navigate(change,direction=1){
   const previousScreen=state.screen,outgoing=stage.lastElementChild,card=outgoing?.querySelector('.question');
   try{
     // Быстрый «Далее» не обрывает заливку, галочку и мягкую реакцию выбора.
-    if(previousScreen==='question'&&direction>0&&!reduce()&&!document.hidden){const remaining=MOTION.feedbackHold-(performance.now()-lastSelectionAt);if(remaining>0)await delay(remaining)}
+    if(direction>0&&!reduce()&&!document.hidden){
+      const now=performance.now(),answerHold=previousScreen==='question'?MOTION.feedbackHold-(now-lastSelectionAt):0;
+      const remaining=Math.max(answerHold,MOTION.pressHold-(now-lastActionGlowAt));
+      if(remaining>0)await delay(remaining);
+    }
     change();syncPhoneDock();
     if(reduce()||document.hidden){render();return}
     if(previousScreen==='question'&&state.screen==='question'&&card){await morphQuestion(card,direction);return}
@@ -1687,6 +1712,7 @@ function next(){
   if(!Number.isInteger(state.answers[q.id][state.item])){
     const card=stage.querySelector('.question');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');document.getElementById('answer-hint').textContent='Выберите, пожалуйста, один вариант ответа.';return;
   }
+  illuminateAdvance(phoneLayout.matches?document.querySelector('#phone-dock [data-action="next"]'):stage.querySelector('[data-action="next"]'));
   navigate(()=>{if(state.item<q.questions.length-1)state.item++;else if(state.scale<scales.length-1){state.scale++;state.item=0;state.screen='breath'}else{state.screen='results';state.completedAt=new Date()}});
 }
 function back(){
@@ -1776,7 +1802,7 @@ document.addEventListener('click',event=>{
   const action=event.target.closest('[data-action]')?.dataset.action;
   if(action==='start')navigate(()=>{state.screen='profile'});
   if(action==='profile-back')navigate(()=>{state.screen='welcome'},-1);
-  if(action==='continue'){if(Object.keys(validateProfile(state.profile)).length){navigate(()=>{state.screen='profile'});return}navigate(()=>{state.screen='question';state.item=0})}
+  if(action==='continue'){if(Object.keys(validateProfile(state.profile)).length){navigate(()=>{state.screen='profile'});return}illuminateAdvance(event.target.closest('[data-action="continue"]'));navigate(()=>{state.screen='question';state.item=0})}
   if(action==='next')next();if(action==='back')back();if(action==='copy')copyResults();
   if(action==='print'){finishResultAnimations();window.print();}
   if(action==='restart'){document.getElementById('restart-confirm').hidden=false;stage.querySelector('[data-action="cancel-restart"]').focus();}
