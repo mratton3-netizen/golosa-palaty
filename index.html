@@ -1842,10 +1842,16 @@ function petalEngraving(part,kind){
  }
  return `<g fill="none" stroke="${kind==='iris'?'#6C5C92':'#78865C'}" stroke-width="${kind==='iris'?.6:.45}" stroke-opacity="${kind==='iris'?.3:.16}">${veins.join('')}</g>`;
 }
-function flowerHead(id,prefix,paintPrefix=prefix,flower=FLOWER_COLLECTION[id]){
+function flowerHead(id,prefix,paintPrefix=prefix,flower=FLOWER_COLLECTION[id],modelLight=false){
  const parts=flower.parts.map((p,i)=>{
   const cid=prefix+'-p'+i;
-  return `<g class="collection-petal" data-corolla-part="${i}" data-closed="${p.closed}" data-onset="${p.delay}" data-turn="${p.turn}" transform="rotate(${p.angle})"><clipPath id="${cid}"><path class="collection-clip" d="${p.d}"/></clipPath><path class="collection-surface" d="${p.d}" fill="url(#${paintPrefix}-${p.tone})" stroke="${flower.kind==='iris'?'#8E83AA':'#AFB49B'}" stroke-width=".45"/><g class="collection-etching" clip-path="url(#${cid})">${petalEngraving(p,flower.kind)}<path d="${p.d}" fill="none" stroke="#FFFFF7" stroke-opacity=".62" stroke-width="1.1" transform="translate(-.5 -.8)"/></g></g>`;
+  const azimuth=(p.angle+flower.tilt)*Math.PI/180;
+  const fx=(.47-.24*Math.cos(azimuth)+.09*Math.sin(azimuth)).toFixed(2);
+  const cool=flower.kind==='iris'?'#51436E':flower.kind==='ranunculus'?'#817047':'#66715E';
+  const relief=modelLight?`<radialGradient id="${cid}-light" gradientUnits="userSpaceOnUse" cx="${Number(fx)*70-38}" cy="-47" r="${flower.kind==='calla'?108:78}" fx="${Number(fx)*86-48}" fy="-54"><stop stop-color="#FFFEED" stop-opacity=".24"/><stop offset=".39" stop-color="#FFFDF2" stop-opacity=".04"/><stop offset=".72" stop-color="${cool}" stop-opacity=".12"/><stop offset="1" stop-color="${cool}" stop-opacity=".46"/></radialGradient>`:'';
+  const modeling=modelLight?`<rect x="-112" y="-145" width="224" height="250" fill="url(#${cid}-light)"/>`:'';
+
+  return `<g class="collection-petal" data-corolla-part="${i}" data-closed="${p.closed}" data-onset="${p.delay}" data-turn="${p.turn}" transform="rotate(${p.angle})">${relief}<clipPath id="${cid}"><path class="collection-clip" d="${p.d}"/></clipPath><path class="collection-surface" d="${p.d}" fill="url(#${paintPrefix}-${p.tone})" stroke="${flower.kind==='iris'?'#8E83AA':'#AFB49B'}" stroke-width=".45"/><g class="collection-etching" clip-path="url(#${cid})">${modeling}${petalEngraving(p,flower.kind)}<path d="${p.d}" fill="none" stroke="#FFFFF7" stroke-opacity=".62" stroke-width="1.1" transform="translate(-.5 -.8)"/></g></g>`;
  });
  let heart='';
  if(flower.kind==='camellia'){
@@ -1876,12 +1882,14 @@ function botanical(id){return `<div class="flower-interlude" data-specimen="${id
 // ==================== УТРЕННИЙ НАТЮРМОРТ: ПЯТЬ ЦВЕТОВ ====================
 // Стебли имеют постоянные точки крепления и сохраняют порядок слева направо.
 // Поле depth определяет перекрытие, а не медицинские данные.
+// У каждого среза своя глубина в сосуде. Наклон побега, ракурс венчика
+// и положение среза задаются независимо, как у поставленных вручную цветов.
 const IKEBANA_LAYOUT=[
- {id:'asrs5',x:356,y:151,s:.86,r:-6,root:350,end:351,cut:711,depth:0,onset:0,bloom:0,sway:.13,period:23},
- {id:'aq10',x:482,y:260,s:.75,r:9,root:398,end:403,cut:704,depth:1,onset:80,bloom:155,sway:-.19,period:21},
- {id:'hcl8',x:169,y:370,s:.87,r:-13,root:294,end:287,cut:717,depth:2,onset:150,bloom:120,sway:-.17,period:19},
- {id:'hads',x:266,y:290,s:1.12,r:-11,root:320,end:317,cut:724,depth:3,onset:45,bloom:85,sway:.12,period:22},
- {id:'bis',x:427,y:402,s:.93,r:9,root:377,end:381,cut:720,depth:4,onset:200,bloom:200,sway:.16,period:20}
+ {id:'asrs5',x:377,y:149,s:.88,r:13,root:341,level:602,end:363,cut:734,lean:-16,neck:-29,pitch:.96,skew:3,girth:5.3,onset:0,bloom:0,sway:.13,period:23},
+ {id:'aq10',x:444,y:247,s:.76,r:16,root:376,level:605,end:397,cut:726,lean:-3,neck:-29,pitch:.90,skew:5,girth:3.5,onset:80,bloom:155,sway:-.19,period:21},
+ {id:'hcl8',x:186,y:363,s:.88,r:-36,root:310,level:608,end:332,cut:737,lean:-13,neck:56,pitch:.98,skew:-3,girth:4.9,onset:150,bloom:120,sway:-.17,period:19},
+ {id:'hads',x:286,y:294,s:1.12,r:-19,root:324,level:610,end:345,cut:741,lean:-12,neck:31,pitch:.74,skew:-8,girth:3.9,onset:45,bloom:85,sway:.12,period:22},
+ {id:'bis',x:389,y:407,s:.96,r:24,root:356,level:613,end:377,cut:738,lean:-9,neck:-25,pitch:.78,skew:7,girth:3,onset:200,bloom:200,sway:.16,period:20}
 ];
 const IKEBANA_HEADS=(()=>{
  const heads=Object.fromEntries(Object.entries(FLOWER_COLLECTION).map(([id,f])=>[id,{...f,parts:f.parts.map(p=>({...p}))}]));
@@ -1892,16 +1900,16 @@ const IKEBANA_HEADS=(()=>{
  ];
  heads.hads.parts=[];
  for(let ring=0;ring<3;ring++){const count=[7,8,6][ring],size=[1,.77,.48][ring];for(let i=0;i<count;i++){
-  const form=scaledDrawing(camellia[(i+ring)%3],size*(1+Math.sin(i*2.1)*.035),size*.91);
+  const form=scaledDrawing(camellia[(i+ring)%3],size*(1+Math.sin(i*2.1)*.035),size*(.88+.09*Math.cos(i*1.7+ring)));
   heads.hads.parts.push(corollaPart(form,i*360/count+ring*21+Math.sin(i)*3,ring===0?'ivory':'pearl',ring*145+i*21,5-ring));
  }}
  heads.aq10.parts=[
   corollaPart('M0 5 C-21 -7 -56 -29 -52 -58 C-49 -85 -23 -72 -15 -54 C-2 -34 6 -10 0 5 Z',-9,'lilac',0,-7),
   corollaPart('M0 5 C-18 -20 -21 -73 -1 -89 C20 -98 35 -65 27 -39 C22 -14 9 -2 0 5 Z',2,'iris',75,6),
   corollaPart('M0 5 C6 -20 34 -67 57 -60 C77 -46 54 -22 35 -10 C19 -1 7 8 0 5 Z',4,'lilac',125,8),
-  corollaPart('M0 2 C-24 -5 -70 0 -78 28 C-85 53 -60 73 -39 57 C-13 39 -5 17 0 2 Z',-4,'iris',280,-6),
-  corollaPart('M0 2 C25 -2 67 2 74 28 C83 49 63 66 41 55 C19 43 4 20 0 2 Z',4,'lilac',335,6),
-  corollaPart('M0 2 C-18 10 -30 41 -18 70 C-5 93 20 84 30 64 C40 37 17 10 0 2 Z',-3,'iris',430,4)
+  corollaPart('M0 2 C-13 4 -29 5 -44 8 C-66 11 -82 23 -77 34 C-83 46 -64 55 -57 52 C-45 63 -28 46 -24 36 C-19 21 -6 18 0 2 Z',-4,'iris',280,-6),
+  corollaPart('M0 2 C16 2 35 4 53 12 C73 16 82 30 73 42 C73 55 57 63 46 54 C30 57 24 42 20 31 C15 20 5 12 0 2 Z',4,'lilac',335,6),
+  corollaPart('M0 2 C-6 15 -9 28 -19 42 C-33 60 -23 77 -13 77 C-7 88 3 80 9 82 C24 86 35 67 28 51 C23 33 11 18 0 2 Z',-3,'iris',430,4)
  ];
  heads.asrs5.parts=[
   corollaPart('M0 29 C-41 9 -69 -68 -39 -103 C-11 -133 29 -110 60 -127 C72 -76 49 -6 0 29 Z',0,'calla',0,-5),
@@ -1914,7 +1922,7 @@ const IKEBANA_HEADS=(()=>{
   'M0 9 C-31 8 -52 -19 -39 -47 C-24 -71 6 -80 28 -58 C49 -39 31 -8 0 9 Z'
  ];
  heads.bis.parts=[];
- for(let ring=0;ring<4;ring++){const count=[9,11,10,7][ring],size=[1,.79,.55,.31][ring];for(let i=0;i<count;i++)heads.bis.parts.push(corollaPart(scaledDrawing(ranunculus[(ring+i)%3],size,size*.9),i*360/count+ring*17+Math.sin(i*1.9)*2,ring<2?'cream':'butter',ring*105+i*18,3-ring*.5))}
+ for(let ring=0;ring<4;ring++){const count=[9,11,10,7][ring],size=[1,.79,.55,.31][ring];for(let i=0;i<count;i++)heads.bis.parts.push(corollaPart(scaledDrawing(ranunculus[(ring+i)%3],size*(1+.065*Math.sin(i*2.4)),size*(.89+.075*Math.cos(i*1.7+ring))),i*360/count+ring*17+Math.sin(i*1.9)*2,ring<2?'cream':'butter',ring*105+i*18,3-ring*.5))}
  heads.hcl8.parts=[
   corollaPart('M0 39 C-29 26 -54 -31 -38 -78 C-25 -97 -10 -101 -2 -85 C14 -46 17 19 0 39 Z',0,'pearl',0,-4),
   corollaPart('M0 39 C-7 5 3 -75 31 -98 C53 -89 58 -36 40 -3 C24 22 11 36 0 39 Z',0,'ivory',90,5),
@@ -1929,11 +1937,9 @@ const IKEBANA_HEADS=(()=>{
 function ikebanaStemGeometry(l){
  const a=l.r*Math.PI/180,base=(FLOWER_COLLECTION[l.id].base-3)*l.s;
  const head={x:l.x-Math.sin(a)*base,y:l.y+Math.cos(a)*base};
- const root={x:l.root,y:565},dy=root.y-head.y;
- // Контрольные точки ограничены коридором между основанием и цветком.
- // При одинаковой высоте порядок стеблей не меняется: нет декоративных «иксов».
- const c1={x:root.x+(head.x-root.x)*.22,y:root.y-dy*.36};
- const c2={x:head.x+(root.x-head.x)*.14,y:head.y+dy*.31};
+ const root={x:l.root,y:l.level},dy=root.y-head.y;
+ const c1={x:root.x+l.lean,y:root.y-dy*.30};
+ const c2={x:head.x+l.neck,y:head.y+dy*.24};
  return {root,c1,c2,head,d:`M${root.x} ${root.y}C${c1.x.toFixed(2)} ${c1.y.toFixed(2)} ${c2.x.toFixed(2)} ${c2.y.toFixed(2)} ${head.x.toFixed(2)} ${head.y.toFixed(2)}`};
 }
 function stemPoint(stem,t){const u=1-t;return {x:u*u*u*stem.root.x+3*u*u*t*stem.c1.x+3*u*t*t*stem.c2.x+t*t*t*stem.head.x,y:u*u*u*stem.root.y+3*u*u*t*stem.c1.y+3*u*t*t*stem.c2.y+t*t*t*stem.head.y}}
@@ -1941,26 +1947,37 @@ function ikebanaFoliage(l,stem,prefix){
  const at=t=>{const p=stemPoint(stem,t);return `${p.x.toFixed(2)} ${p.y.toFixed(2)}`};
  const leaf=(t,r,scale,d,veins)=>`<g class="ikebana-leaf" transform="translate(${at(t)}) rotate(${r}) scale(${scale})">${engravedLeaf(d,veins,prefix)}</g>`;
  if(l.id==='hads')return leaf(.58,-43,1,'M0 0C-15-3-29-24-24-50L-20-47L-21-53L-15-50L-15-56C8-46 16-15 0 0Z',['M0 0Q-4-29-15-53','M-3-13L-21-29M-6-27L-21-41M-2-13L7-30M-5-27L1-44']);
- if(l.id==='aq10')return leaf(.25,24,1,'M0 0C-5-51-7-98-20-133C2-102 13-49 0 0Z',['M0 0Q2-72-20-130']);
- if(l.id==='hcl8')return leaf(.27,-28,1,'M0 0C-24-31-31-74-17-113C-12-133-15-144-14-154C8-121 5-81-1-50C-5-29-4-12 0 0Z',['M0 0Q-16-83-14-150','M-4-21Q-7-72-9-108']);
- if(l.id==='asrs5')return leaf(.19,-18,.77,'M0 0C-17-23-47-32-52-61C-38-63-22-74-18-99C8-78 17-28 0 0Z',['M0 0Q-10-57-18-96','M-8-31L-44-57M-11-53L-33-70M-8-31L6-57']);
- return leaf(.45,35,.78,'M0 0C-15-10-34-7-41-18L-25-23C-39-34-39-46-38-51C-24-51-18-39-12-34L-13-55C2-48 2-29 5-21C12-32 20-33 23-32C25-18 12-8 0 0Z',['M0 0Q-4-27-13-51','M-3-17L-36-46M-3-14L-34-18']);
+ if(l.id==='aq10')return leaf(.42,26,.84,'M0 0C-5-51-7-98-20-133C2-102 13-49 0 0Z',['M0 0Q2-72-20-130']);
+ if(l.id==='hcl8')return leaf(.55,-18,.90,'M0 0C-24-31-31-74-17-113C-12-133-15-144-14-154C8-121 5-81-1-50C-5-29-4-12 0 0Z',['M0 0Q-16-83-14-150','M-4-21Q-7-72-9-108']);
+ if(l.id==='asrs5')return leaf(.37,-25,.77,'M0 0C-17-23-47-32-52-61C-38-63-22-74-18-99C8-78 17-28 0 0Z',['M0 0Q-10-57-18-96','M-8-31L-44-57M-11-53L-33-70M-8-31L6-57']);
+ return leaf(.64,46,.80,'M0 0C-15-10-34-7-41-18L-25-23C-39-34-39-46-38-51C-24-51-18-39-12-34L-13-55C2-48 2-29 5-21C12-32 20-33 23-32C25-18 12-8 0 0Z',['M0 0Q-4-27-13-51','M-3-17L-36-46M-3-14L-34-18']);
+}
+// Верхняя касательная продолжается под водой. При взгляде сквозь
+// выпуклую стенку боковое смещение сильнее у краёв, чем в центре.
+function immersedStem(l,stem){
+ const height=l.cut-l.level;
+ const slope=(stem.c1.x-l.root)/(stem.c1.y-l.level);
+ const bend=(l.root-341)*.085;
+ const end=l.end+bend*.65;
+ const path=`M${l.root} ${l.level} C${l.root+slope*6} ${l.level+6} ${l.root+slope*21+bend} ${l.level+19} ${l.root+slope*27+bend} ${l.level+27} S${end-slope*height*.18} ${l.cut-height*.22} ${end} ${l.cut}`;
+ return `<g class="ikebana-wet-stem" opacity=".78"><path d="${path}" stroke="#59735E" stroke-width="${l.girth*1.19}"/><path d="${path}" stroke="#A4B093" stroke-width="${l.girth*.48}" transform="translate(-.55 0)"/><ellipse cx="${end}" cy="${l.cut}" rx="${l.girth*.57}" ry="1.05" fill="#AEB59A" transform="rotate(-17 ${end} ${l.cut})"/></g>`;
 }
 function bouquetSVG(){
  const prefix='ikebana-'+(++flowerSerial),vase='M270 500C273 542 258 579 253 620C238 681 262 741 321 751C376 765 431 739 441 691C447 653 425 590 416 553C410 531 409 511 410 500Z';
  const plants=IKEBANA_LAYOUT.map(l=>{
-  const stem=ikebanaStemGeometry(l);
-  return `<g class="ikebana-plant" data-bouquet-flower="${l.id}" data-plant-onset="${l.onset}" style="--plant-root:${l.root}px 565px;--plant-sway:${l.sway}deg;--plant-counter:${-l.sway*.55}deg;--plant-period:${l.period}s">
-   <g class="ikebana-stem-group" fill="none" stroke-linecap="round"><path class="ikebana-stem" pathLength="100" d="${stem.d}" stroke="url(#${prefix}-stem)" stroke-width="${l.id==='asrs5'?3.5:2.8}"/><path class="ikebana-stem-vein" pathLength="100" d="${stem.d}" stroke="#B9C6A0" stroke-opacity=".45" stroke-width=".65" transform="translate(-.55 0)"/>
-   <path class="ikebana-wet-stem" d="M${l.root} 565C${l.root+2} 590 ${l.end+1} 654 ${l.end} ${l.cut}" stroke="#466F50" stroke-opacity=".64" stroke-width="3.4"/>
-   <path d="M${l.root+.7} 565C${l.root+2.7} 590 ${l.end+1.7} 654 ${l.end+.7} ${l.cut}" stroke="#C6D4AF" stroke-opacity=".47" stroke-width=".8"/></g>
+  const stem=ikebanaStemGeometry(l),base=FLOWER_COLLECTION[l.id].base-3;
+  return `<g class="ikebana-plant" data-bouquet-flower="${l.id}" data-plant-onset="${l.onset}" style="--plant-root:${l.root}px ${l.level}px;--plant-sway:${l.sway}deg;--plant-counter:${-l.sway*.55}deg;--plant-period:${l.period}s">
+   <g class="ikebana-stem-group" fill="none" stroke-linecap="round"><path class="ikebana-stem" pathLength="100" d="${stem.d}" stroke="url(#${prefix}-stem)" stroke-width="${l.girth}"/><path class="ikebana-stem-vein" pathLength="100" d="${stem.d}" stroke="#B9C6A0" stroke-opacity=".45" stroke-width=".65" transform="translate(-.55 0)"/>
+   ${immersedStem(l,stem)}</g>
    <g class="ikebana-foliage">${ikebanaFoliage(l,stem,prefix)}</g>
-   <g class="ikebana-head" data-flower-offset="${l.bloom}" transform="translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})">${flowerHead(l.id,prefix+'-'+l.id,prefix,IKEBANA_HEADS[l.id])}</g>
+   <g class="ikebana-head" data-flower-offset="${l.bloom}" transform="translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})"><g transform="translate(0 ${base}) skewX(${l.skew}) scale(1 ${l.pitch}) translate(0 ${-base})">${flowerHead(l.id,prefix+'-'+l.id,prefix,IKEBANA_HEADS[l.id],true)}</g></g>
   </g>`;
  }).join('');
  return `<svg class="bouquet-art ikebana-art" viewBox="0 0 680 820" role="img" aria-label="Асимметричный букет: белая камелия, сиреневый ирис, белая калла, кремовый ранункулюс и белый тюльпан в прозрачной вазе с водой">${collectionDefs(prefix)}<defs>
   <linearGradient id="${prefix}-smoke" x1="0" y1=".1" x2="1" y2=".2"><stop stop-color="#6C8875" stop-opacity=".32"/><stop offset=".08" stop-color="#ACBDAC" stop-opacity=".16"/><stop offset=".25" stop-color="#E5EBDF" stop-opacity=".06"/><stop offset=".52" stop-color="#CFD9CA" stop-opacity=".11"/><stop offset=".78" stop-color="#748E78" stop-opacity=".21"/><stop offset=".95" stop-color="#B5C6B4" stop-opacity=".24"/><stop offset="1" stop-color="#496D57" stop-opacity=".32"/></linearGradient>
-  <linearGradient id="${prefix}-water" x1="0" y1="0" x2=".1" y2="1"><stop stop-color="#B8C8B6" stop-opacity=".13"/><stop offset=".7" stop-color="#9AAF98" stop-opacity=".16"/><stop offset="1" stop-color="#708B72" stop-opacity=".24"/></linearGradient>
+  <linearGradient id="${prefix}-water" x1="0" y1="0" x2=".18" y2="1"><stop stop-color="#E5EBE0" stop-opacity=".09"/><stop offset=".48" stop-color="#C3D1C5" stop-opacity=".16"/><stop offset=".88" stop-color="#839A91" stop-opacity=".27"/><stop offset="1" stop-color="#BCCAC0" stop-opacity=".30"/></linearGradient>
+  <linearGradient id="${prefix}-meniscus"><stop stop-color="#5E766D" stop-opacity=".60"/><stop offset=".15" stop-color="#F4F7ED" stop-opacity=".37"/><stop offset=".51" stop-color="#F2F4E9" stop-opacity=".09"/><stop offset=".81" stop-color="#DCE7DB" stop-opacity=".39"/><stop offset="1" stop-color="#647E71" stop-opacity=".53"/></linearGradient>
+  <linearGradient id="${prefix}-lens"><stop stop-color="#788F86" stop-opacity=".32"/><stop offset=".08" stop-color="#F9FCF2" stop-opacity=".30"/><stop offset=".23" stop-color="#F7FAF2" stop-opacity=".03"/><stop offset=".69" stop-color="#D2DDD4" stop-opacity=".04"/><stop offset=".87" stop-color="#CAD8CE" stop-opacity=".28"/><stop offset="1" stop-color="#71897D" stop-opacity=".39"/></linearGradient>
   <linearGradient id="${prefix}-base" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#DAE3D5" stop-opacity=".2"/><stop offset=".55" stop-color="#88A28B" stop-opacity=".3"/><stop offset="1" stop-color="#52745C" stop-opacity=".4"/></linearGradient>
   <linearGradient id="${prefix}-shine" x1="0" x2="1"><stop stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".42" stop-color="#FFFFF5" stop-opacity=".35"/><stop offset=".6" stop-color="#FFFFF5" stop-opacity=".12"/><stop offset="1" stop-color="#FFFFF5" stop-opacity="0"/></linearGradient>
   <radialGradient id="${prefix}-contact"><stop stop-color="#24472F" stop-opacity=".25"/><stop offset=".5" stop-color="#425C41" stop-opacity=".11"/><stop offset="1" stop-color="#425C41" stop-opacity="0"/></radialGradient>
@@ -1972,14 +1989,18 @@ function bouquetSVG(){
  <path class="ikebana-morning-light" d="M135 33C286 14 481 118 572 364L615 754H171Z" fill="url(#${prefix}-morning)"/>
  <g class="ikebana-ground"><ellipse cx="353" cy="760" rx="154" ry="23" fill="url(#${prefix}-contact)"/><ellipse class="ikebana-caustic" cx="438" cy="758" rx="114" ry="20" fill="url(#${prefix}-caustic)"/></g>
  <g class="ikebana-glass-back"><path d="${vase}" fill="url(#${prefix}-smoke)" fill-opacity=".55"/><ellipse cx="340" cy="500" rx="70" ry="10" fill="none" stroke="#78907A" stroke-opacity=".28" stroke-width="1"/>
- <path d="M253 565C285 571 371 570 431 563V760H247Z" fill="url(#${prefix}-water)" clip-path="url(#${prefix}-vase)"/></g>
+ <path d="M255 605C267 591 409 591 429 605V760H246Z" fill="url(#${prefix}-water)" clip-path="url(#${prefix}-vase)"/></g>
  ${plants}
  <g class="ikebana-glass-front">
  <g clip-path="url(#${prefix}-vase)">
   <path d="${vase}" fill="url(#${prefix}-smoke)"/>
   <path d="M258 618C248 688 275 738 325 740C374 744 417 723 432 682L450 768H245Z" fill="url(#${prefix}-base)" mask="url(#${prefix}-base-mask)"/>
-  <path class="ikebana-waterline" d="M266 565C287 554 392 554 419 564C393 575 287 575 266 565Z" fill="#D9E3D0" fill-opacity=".13" stroke="#6E8871" stroke-opacity=".3" stroke-width=".8"/>
-  <path d="M269 566Q331 572 414 565" fill="none" stroke="#FFFFEF" stroke-opacity=".53" stroke-width=".95"/>
+  <path d="M254 604C269 617 410 620 430 604L450 752H241Z" fill="url(#${prefix}-lens)"/>
+  <path class="ikebana-waterline" d="M255 605C268 592 410 592 428 605C414 619 273 620 255 605Z" fill="url(#${prefix}-meniscus)"/>
+  <path d="M256 604C258 612 285 615 313 615.8M370 617C397 616 424 612 428 604" fill="none" stroke="#637B70" stroke-opacity=".54" stroke-width="1.15"/>
+  <path d="M258 604C263 611 294 614 312 614M381 614C405 612 419 610 424 606" fill="none" stroke="#FFFEF3" stroke-opacity=".64" stroke-linecap="round" stroke-width="1.25"/>
+  <path d="M255 611C251 649 249 681 264 704C259 676 258 645 261 616ZM418 614C431 652 436 686 420 712C442 690 438 651 426 609Z" fill="#A0B4A7" opacity=".23"/>
+  <path d="M275 707C299 739 346 746 387 729C363 746 308 752 280 723Z" fill="#F7F9EE" opacity=".54"/>
   <path d="M267 626C261 668 277 717 296 729" fill="none" stroke="#F9FBED" stroke-opacity=".4" stroke-width="3.7" stroke-linecap="round"/>
   <path d="M275 624C271 661 280 693 287 706M421 627C437 680 413 725 393 737" fill="none" stroke="#F8FAED" stroke-opacity=".47" stroke-width="1.1"/>
   <path class="ikebana-glass-sheen" d="M278 517C287 563 261 600 268 658C274 696 290 718 305 726L324 733C296 700 285 673 285 630C284 583 304 554 292 517Z" fill="url(#${prefix}-shine)"/>
