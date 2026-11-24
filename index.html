@@ -289,7 +289,7 @@ html.calm .young-leaf-unfurl,html.calm .quote-twig,html.calm .window-shadow{anim
 .branch-guide{fill:none;stroke:#37674812;stroke-width:.8}.branch-stem{fill:none;stroke:#4B7254;stroke-width:1.55;stroke-linecap:round;stroke-dasharray:100;transition:stroke-dashoffset 1250ms cubic-bezier(.25,.65,.25,1)}
 .branch-leaf{opacity:0;transition:opacity 280ms ease}.branch-leaf.is-complete{opacity:1}.branch-leaf-growth{transform-origin:0 0}
 .branch-bud{opacity:0;transition:opacity 1000ms ease,transform 1250ms cubic-bezier(.25,.65,.25,1)}.branch-bud.is-visible{opacity:1}.branch-bloom{opacity:0;transition:opacity 1200ms ease}.branch-bud.is-flowering .branch-bloom{opacity:1}
-.botanical-interlude{width:110px;height:126px;margin:0 auto 18px}.botanical-interlude svg{width:100%;height:100%;overflow:visible}
+
 .bloom-story{position:relative;width:calc(100vw - 2px);left:50%;margin-left:calc(-50vw + 1px);isolation:isolate;background:linear-gradient(115deg,#F6F7EEA3,#EAF0E48C);margin-top:-15px;margin-bottom:48px;overflow:hidden}
 .bloom-story:before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 76% 25%,#FFFFE8 0,transparent 60%);opacity:var(--bloom-light,.23)}
 .bloom-editorial{width:min(1180px,100%);padding:clamp(36px,5vw,78px) clamp(24px,5vw,68px) 30px;margin:auto;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);align-items:center;gap:0;min-height:min(740px,86svh)}
@@ -303,8 +303,8 @@ html.calm .young-leaf-unfurl,html.calm .quote-twig,html.calm .window-shadow{anim
 .bloom-skip span{font-size:22px;font-weight:400;transition:transform 450ms var(--ease-out)}.bloom-skip:hover span{transform:translate(3px,3px)}
 .bloom-footnote{font-size:10px;line-height:1.7;color:#62725D;margin-top:30px;letter-spacing:.01em}
 .bloom-visual{position:relative;align-self:stretch;display:flex;align-items:center;min-width:0;padding-bottom:45px}
-.magnolia-art{width:125%;max-width:none;flex:none;margin-left:-8%;height:auto;overflow:visible;filter:drop-shadow(9px 13px 9px #34462D12)}
-.mag-main-branch,.mag-secondary-branch{stroke-dasharray:100;stroke-dashoffset:0}.magnolia-leaf-flex{transform-origin:0 0}
+
+.magnolia-leaf-flex{transform-origin:0 0}
 .bloom-specimen{position:absolute;bottom:18px;left:34%;font-family:Georgia,'Times New Roman',serif;color:#49654C;font-size:13px;letter-spacing:.01em;white-space:nowrap}
 .bloom-specimen>span{display:block;margin-top:6px;color:#6F7C66;font-family:'Onest',Arial,sans-serif;font-size:8px;letter-spacing:.12em;text-transform:uppercase}
 .bloom-result-actions{margin:0 0 32px}.result-heading .bloom-final-message{font-size:13px;line-height:1.8}
@@ -317,12 +317,36 @@ html.calm .young-leaf-unfurl,html.calm .quote-twig,html.calm .window-shadow{anim
  .bloom-story{margin-top:-8px;margin-bottom:31px}.bloom-editorial{padding:34px max(22px,env(safe-area-inset-left)) 25px;grid-template-columns:1fr;min-height:0;gap:0}
  .bloom-copy{padding-bottom:0}.bloom-kicker{font-size:9px;margin-bottom:24px;letter-spacing:.15em}.bloom-title{font-size:clamp(39px,10.9vw,65px);line-height:1.05;letter-spacing:-.055em}.bloom-title-mask{margin-bottom:15px}
  .bloom-message{font-size:13px;line-height:1.85;max-width:410px}.bloom-skip{margin-top:16px;min-height:46px;font-size:12px;gap:26px}.bloom-footnote{display:none}
- .bloom-visual{height:clamp(330px,92vw,460px);padding:0;margin-top:-4px;justify-content:center}.magnolia-art{width:100%;height:112%;margin-left:0;max-width:520px;object-fit:contain;flex:initial}
+ .bloom-visual{height:clamp(330px,92vw,460px);padding:0;margin-top:-4px;justify-content:center}
  .bloom-specimen{left:auto;right:0;bottom:3px;font-size:12px}.bloom-specimen>span{font-size:7px;letter-spacing:.08em}.bloom-result-actions{margin-bottom:27px}
 }
 @media(max-width:360px){.bloom-editorial{padding-left:19px;padding-right:19px}.bloom-title{font-size:38px}.bloom-message{font-size:12px}.bloom-visual{height:315px}.bloom-specimen{font-size:11px}.bloom-specimen>span{font-size:6.5px}}
 @media(prefers-reduced-motion:reduce){.branch-stem,.branch-leaf,.branch-bud,.branch-bloom,.bloom-skip span,.results .result-card{transition:none!important}.bloom-title{transform:none!important}.results .result-card.is-pending{opacity:1;transform:none}}
 @media print{.bloom-story,.bloom-result-actions{display:none!important}.results .result-card.is-pending{opacity:1!important;transform:none!important}.result-heading .bloom-final-message{font-size:8pt;line-height:1.4;margin-top:2mm}}
+
+/* Коллекция: увеличенные гербарные рисунки в едином рассеянном свете. */
+.flower-interlude{position:relative;width:200px;height:224px;margin:-9px auto 19px;isolation:isolate}
+.specimen-art{width:100%;height:100%;overflow:visible;filter:drop-shadow(4px 6px 5px #31503D12)}
+.specimen-name{display:block;position:absolute;bottom:-4px;left:0;right:0;text-align:center;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:10px;color:#71816A;letter-spacing:.025em}
+.collection-surface{stroke-linejoin:round}.collection-etching{pointer-events:none}.collection-heart{transform-origin:0 0}
+.collection-story .bloom-editorial{min-height:min(800px,90svh);padding-top:36px;padding-bottom:24px}
+.collection-story .bouquet-visual{min-height:650px;padding-bottom:30px;justify-content:center}
+.bouquet-art{width:116%;max-width:none;height:auto;flex:none;margin-left:-3%;overflow:visible;filter:drop-shadow(8px 12px 11px #35523C0D)}
+.collection-story .bouquet-caption{left:30%;bottom:1px;text-align:center;font-size:12px}
+.bouquet-contact-shadow{opacity:.85}.bouquet-waterline,.bouquet-surface-glint{transform-origin:320px 530px}
+@media(max-width:760px){
+ .flower-interlude{width:164px;height:186px;margin:-7px auto 21px}.specimen-name{font-size:9px;bottom:-6px}
+ .collection-story .bloom-editorial{min-height:0;padding-top:34px;padding-bottom:25px}
+ .collection-story .bouquet-visual{min-height:0;height:clamp(390px,116vw,510px);padding-bottom:25px;margin-top:10px}
+ .bouquet-art{height:100%;width:100%;max-width:480px;flex:initial;margin-left:0}
+ .collection-story .bouquet-caption{left:auto;right:12px;bottom:0;font-size:11px}.collection-story .bouquet-caption>span{font-size:7px;letter-spacing:.07em}
+ /* На телефоне не пересчитываем многослойный фильтр зерна во время морфинга. */
+ .flower-head{filter:none}.specimen-art,.bouquet-art{filter:none}
+}
+@media(max-width:360px){.flower-interlude{width:152px;height:176px}.collection-story .bouquet-visual{height:380px}.collection-story .bouquet-caption{right:0;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.flower-interlude *,.bouquet-art *{animation:none!important;transition:none!important}}
+.calm .flower-interlude *,.calm .bouquet-art *{animation:none!important;transition:none!important}
+@media print{.flower-interlude,.collection-story{display:none!important}}
 
 </style>
 </head>
@@ -1653,11 +1677,6 @@ const esc=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','
 const arrow='<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
 const lock='<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="9" width="12" height="9" rx="3"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>';
 // ==================== БЕРЕЖНОЕ ПРОХОЖДЕНИЕ И ВИЗУАЛЬНАЯ СВОДКА ====================
-function botanical(id){
- const done=completedQuestionnaires(),n=done.filter(Boolean).length;
- const positions=[[-36,59,-52],[-17,25,58],[8,-5,-54],[28,-30,56],[44,-57,-48]];
- return `<div class="botanical-interlude" aria-hidden="true"><svg viewBox="0 0 160 180"><g transform="translate(70 92)"><path d="M-54 83C-43 60-20 50-17 25C-12 4 16-10 28-30S44-56 52-76" fill="none" stroke="#627957" stroke-width="2.2" stroke-linecap="round"/>${positions.map((pos,i)=>done[i]?`<g transform="translate(${pos[0]} ${pos[1]}) rotate(${pos[2]}) scale(.8)">${leafDetail('interlude-'+id+'-'+i)}</g>`:'').join('')}${n>=4?'<path d="M52-76C42-78 43-94 50-101C58-94 63-81 52-76Z" fill="#F3F0DC" stroke="#9DA88A" stroke-width=".8"/>':''}${n===0?'<path d="M52-76Q46-84 49-91Q57-86 52-76" fill="#728C61"/>':''}</g></svg></div>`;
-}
 function franklQuote(){return `<figure class="frankl-quote glass"><span class="quote-light" aria-hidden="true"></span><span class="quote-mark" aria-hidden="true">“</span><svg class="quote-branch" viewBox="0 0 140 220" aria-hidden="true"><path d="M34 210C53 173 68 133 77 88S91 38 112 15" fill="none" stroke="#4E8F6B" stroke-width="2" stroke-linecap="round"/><g class="quote-twig"><path d="M70 121C40 121 21 103 24 76c30 3 49 19 46 45Z" fill="#A9CDB4"/><path d="M70 121 34 87" fill="none" stroke="#4E8F6B" stroke-width="1"/></g><g class="quote-twig twig-two"><path d="M79 91C80 62 103 48 128 52c-3 24-21 42-49 39Z" fill="#4E8F6B"/><path d="M79 91 117 61" fill="none" stroke="#D1E5CF" stroke-width="1"/></g><g class="quote-twig twig-three"><path d="M47 177C22 174 8 153 14 132c27 6 41 22 33 45Z" fill="#4E8F6B"/><path d="M47 177 21 143" fill="none" stroke="#D1E5CF" stroke-width="1"/></g><path d="M101 31C88 16 94 3 114 1c4 13 1 24-13 30Z" fill="#A9CDB4"/><path d="M58 151c21-25 44-23 60-10-16 21-39 25-60 10Z" fill="#1F5A43"/><path d="m61 151 46-8" fill="none" stroke="#A9CDB4" stroke-width="1"/></svg><blockquote><p>«Когда мы не можем изменить ситуацию, <span class="quote-emphasis">мы вынуждены изменить себя</span>».</p></blockquote><figcaption>Виктор Франкл</figcaption><p class="quote-caption">Бережность к себе начинается с внимания.</p></figure>`}
 function careInformation(){return `<details class="important glass"><summary>Важно знать перед началом</summary><p>Пять коротких опросников помогут описать ваше самочувствие с разных сторон. Отвечайте так, как ощущаете: здесь важен ваш опыт, а не «правильный» ответ.</p><dl class="scale-guide"><div><dt>HADS</dt><dd>Тревога и настроение за последнюю неделю.</dd></div><div><dt>AQ-10</dt><dd>Особенности общения, восприятия и привычного поведения.</dd></div><div><dt>ASRS-5</dt><dd>Внимание, организация дел и активность за последние шесть месяцев.</dd></div><div><dt>BIS-brief</dt><dd>Привычный темп решений и склонность действовать импульсивно.</dd></div><div><dt>HCL-8</dt><dd>Периоды необычного подъёма настроения и активности в прошлом.</dd></div></dl><p>Это скрининг для взрослых от 18 лет. Он помогает обозначить темы для разговора; диагноз устанавливает врач в клинической беседе. Возможности каждого опросника зависят от его версии и условий применения.</p><p>Можно делать паузы, возвращаться к ответам и на главный экран. Ответы сохранятся в этой вкладке до её закрытия или обновления. Поделиться результатами можно по собственному решению.</p></details>`}
 function comparisonData(rows){return rows.map(r=>{const span=r.max-r.min;const fraction=r.available&&span>0?Math.max(0,Math.min(1,(r.total-r.min)/span)):0;const threshold=r.scale==='HADS'?8:r.scale==='AQ-10'?6:r.scale==='HCL-8'?9.3:null;return {...r,fraction,thresholdFraction:threshold===null?null:(threshold-r.min)/span}})}
@@ -1723,73 +1742,192 @@ function syncProgressBranch(){
  });
  const bud=node.querySelector('.branch-bud');bud.classList.toggle('is-visible',done.filter(Boolean).length>=4);bud.classList.toggle('is-flowering',done.every(Boolean));const stem=node.querySelector('.branch-stem'),tip=stem.getPointAtLength(stem.getTotalLength()*count/totalQuestions);bud.style.transform=`translate(${tip.x}px,${tip.y}px)`;
 }
-// Лепестки — отдельные криволинейные поверхности. Контрольные точки меняются,
-// пластинка изгибается и разворачивается; масштабирование не подменяет раскрытие.
-const petalClosed='M0 0 C-8 -23 -13 -61 -3 -94 C9 -67 15 -22 0 0 Z';
-const magnoliaPetals=[
- {d:'M0 0 C-42 -43 -77 -138 -43 -185 C14 -163 43 -60 0 0 Z',r:-17,fill:'back',delay:1050},
- {d:'M0 0 C-18 -62 1 -177 58 -190 C96 -137 47 -30 0 0 Z',r:6,fill:'back',delay:1170},
- {d:'M0 0 C-63 -12 -151 -89 -140 -140 C-79 -166 -8 -67 0 0 Z',r:-4,fill:'side',delay:1270},
- {d:'M0 0 C37 -57 140 -121 178 -88 C173 -26 51 10 0 0 Z',r:-4,fill:'side',delay:1450},
- {d:'M0 0 C-62 24 -167 -4 -183 -62 C-142 -115 -45 -47 0 0 Z',r:4,fill:'front',delay:1540},
- {d:'M0 0 C38 -21 138 -33 155 17 C115 65 33 44 0 0 Z',r:2,fill:'front',delay:1700},
- {d:'M0 0 C-34 -41 -67 -114 -34 -148 C17 -136 37 -43 0 0 Z',r:13,fill:'inner',delay:1820},
- {d:'M0 0 C6 -48 51 -122 87 -109 C109 -61 48 -5 0 0 Z',r:3,fill:'inner',delay:1970},
- {d:'M0 0 C-42 -4 -99 -44 -87 -79 C-50 -106 2 -43 0 0 Z',r:-2,fill:'front',delay:2090}
-];
-function petalVein(path){const a=path.match(/-?\d*\.?\d+/g).map(Number);return `M0 0 Q${a[4]*.4} ${a[5]*.4} ${a[6]*.9} ${a[7]*.9}`}
-function magnolia(){
- const leafPositions=[
-  {x:251,y:569,r:-61,s:1.7},{x:288,y:498,r:58,s:2.2},{x:305,y:426,r:-59,s:2.35},
-  {x:384,y:403,r:67,s:2.6},{x:330,y:351,r:-53,s:2.15},{x:388,y:304,r:64,s:1.7}
- ];
- return `<svg class="magnolia-art" viewBox="0 0 640 690" role="img" aria-label="Асимметричная ветвь магнолии с зелёными листьями и молочно-белым цветком"><defs>
- <linearGradient id="mag-bark" x1="0" x2="1"><stop stop-color="#4A5740"/><stop offset=".3" stop-color="#849071"/><stop offset=".58" stop-color="#616D50"/><stop offset="1" stop-color="#344B38"/></linearGradient>
- <linearGradient id="mag-back" x1="0" y1="1" x2=".7" y2="0"><stop stop-color="#B7B9A1"/><stop offset=".24" stop-color="#DFDFCD"/><stop offset=".65" stop-color="#F3F1DF"/><stop offset="1" stop-color="#FFFFF5"/></linearGradient>
- <linearGradient id="mag-side" x1=".2" y1="1" x2=".8" y2="0"><stop stop-color="#AAAE93"/><stop offset=".25" stop-color="#DADAC3"/><stop offset=".54" stop-color="#FFFFF1"/><stop offset=".87" stop-color="#E4E3D0"/><stop offset="1" stop-color="#FCFAEA"/></linearGradient>
- <linearGradient id="mag-front" x1="0" y1="1" x2=".35" y2="0"><stop stop-color="#909C81"/><stop offset=".22" stop-color="#D1D4BB"/><stop offset=".59" stop-color="#F9F8E7"/><stop offset="1" stop-color="#FFFFF5"/></linearGradient>
- <linearGradient id="mag-inner" x1=".2" y1="1" x2=".7" y2="0"><stop stop-color="#B9BA9D"/><stop offset=".25" stop-color="#E5E5C9"/><stop offset=".65" stop-color="#FFFFEF"/><stop offset="1" stop-color="#EFEBD6"/></linearGradient>
- <radialGradient id="mag-heart"><stop stop-color="#DBCE9D"/><stop offset=".55" stop-color="#B4AD77"/><stop offset="1" stop-color="#657E4E"/></radialGradient>
- </defs>
- <g class="magnolia-stem" fill="none" stroke-linecap="round"><path class="mag-main-branch" pathLength="100" d="M192 656C223 598 278 550 289 492C298 444 287 414 323 361C346 327 369 295 374 251" stroke="url(#mag-bark)" stroke-width="6.5"/><path class="mag-secondary-branch" pathLength="100" d="M292 481C330 463 359 431 384 403M317 370C294 345 269 329 242 311M345 330C366 321 380 313 388 304M248 575L251 569M288 501L288 498M304 431L305 426M329 354L330 351" stroke="#5B7051" stroke-width="2.6"/><path d="M195 654C226 597 281 541 291 488C300 442 290 408 325 359" stroke="#C3CCAB" stroke-opacity=".45" stroke-width=".8"/></g>
- ${leafPositions.map((l,i)=>`<g class="magnolia-leaf" data-magnolia-leaf="${i}" transform="translate(${l.x} ${l.y}) rotate(${l.r})"><path d="M0 0Q-2 -8 0 -13" fill="none" stroke="#566F4C" stroke-width="1.8"/><g class="magnolia-leaf-flex"><g transform="translate(0 -11) scale(${l.s})">${leafDetail('magnolia-leaf-'+i)}</g></g></g>`).join('')}
- <g class="magnolia-flower" transform="translate(374 251) rotate(-9)">
- <path d="M-2 8C-27 0-39-19-31-37C-12-27-6-11-2 8M0 6C3-16 15-38 27-40C35-19 19 3 0 6" fill="#5F7853" stroke="#486747" stroke-width=".6"/>
- ${magnoliaPetals.map((p,i)=>`<g class="magnolia-petal" data-petal="${i}"><path class="petal-surface" d="${p.d}" fill="url(#mag-${p.fill})" stroke="#B6B8A0" stroke-width=".5"/><path class="petal-fold" d="${p.d}" fill="none" stroke="#FFFFFF" stroke-opacity=".45" stroke-width="1" transform="translate(-.7 -1)"/><path class="petal-vein" d="${petalVein(p.d)}" fill="none" stroke="#B5B99E" stroke-opacity=".28" stroke-width=".65"/></g>`).join('')}
- <g class="magnolia-heart"><path d="M-8-8C-15-18-10-32-2-39C7-33 11-18 6-9Z" fill="url(#mag-heart)"/>
- ${Array.from({length:23},(_,i)=>{const a=i*2.4,r=3+Math.sqrt(i)*2.1,x=Math.cos(a)*r,y=-13+Math.sin(a)*r*.48;return `<path d="M${x.toFixed(1)} ${y.toFixed(1)}q${(Math.cos(a)*3).toFixed(1)} -5 ${(Math.cos(a)*6).toFixed(1)} -7" fill="none" stroke="${i%2?'#C6BA80':'#8C9B61'}" stroke-width="1.2" stroke-linecap="round"/>`}).join('')}
- </g></g></svg>`;
+// ==================== КОЛЛЕКЦИЯ ПЕРВОГО ШАГА ====================
+// Пять самостоятельных ботанических рисунков. Вид растения не связан с баллом.
+let flowerSerial=0,interludeController=null,interludeHost=null;
+const seenFlowers=new Set();
+function scaledDrawing(d,sx,sy=sx){let n=0;return d.replace(/-?\d*\.?\d+/g,v=>(Number(v)*(n++%2?sy:sx)).toFixed(2))}
+function foldedDrawing(d,kind){
+ // Контрольные точки сжимаются к оси, кончик сгибается внутрь.
+ // Разные коэффициенты у основания, боковых стенок и кончика создают складку,
+ // а не равномерное масштабирование изображения.
+ let i=0;const nums=d.match(/-?\d*\.?\d+/g).map(Number);
+ return d.replace(/-?\d*\.?\d+/g,v=>{const pair=Math.floor(i/2),isY=i++%2,x=nums[pair*2],y=nums[pair*2+1];const f=kind==='calla'?.22:kind==='iris'?.23:kind==='tulip'?.42:.43;const height=kind==='camellia'?.28:kind==='ranunculus'?.24:.72;
+  return (isY?y*(pair===0?1:height)+Math.abs(x)*.04:x*(pair===0?1:f)+(pair%3-1)*1.2).toFixed(2)});
 }
-function bloomStory(){return `<section class="bloom-story" aria-labelledby="bloom-title"><div class="bloom-editorial"><div class="bloom-copy"><p class="bloom-kicker">Первый шаг <span aria-hidden="true">/</span> In bloom</p><div class="bloom-title-mask"><h2 class="bloom-title" id="bloom-title">Вы сделали<br>первый <em>шаг.</em></h2></div><p class="bloom-message">Вы уделили время своему психическому состоянию. Сохраните результаты обследования и обсудите их со специалистом.</p><a class="bloom-skip" href="#results-summary">Перейти к результатам <span aria-hidden="true">↘</span></a><p class="bloom-footnote">Внимание к себе — начало понимания.</p></div><div class="bloom-visual">${magnolia()}<span class="bloom-specimen" aria-hidden="true">Magnolia <i>grandiflora</i><span>Пять этапов · один первый шаг</span></span></div></div></section>`}
-function createBloomStory(host){
- let raf=0,started=null,elapsed=0,disposed=false;
- const petals=[...host.querySelectorAll('[data-petal]')].map((group,i)=>({group,spec:magnoliaPetals[i],shape:pathBetween(petalClosed,magnoliaPetals[i].d),vein:pathBetween(petalVein(petalClosed),petalVein(magnoliaPetals[i].d))}));
- const leaves=[...host.querySelectorAll('[data-magnolia-leaf]')];
- function paint(ms){
-  const staticMode=reduce(),time=staticMode?4000:ms;
-  host.style.setProperty('--bloom-title-y',(24*(1-botanicalEase(clamp01((time-180)/1000))))+'px');
-  host.style.setProperty('--bloom-copy-opacity',String(clamp01(time/600)));
-  host.querySelectorAll('.mag-main-branch,.mag-secondary-branch').forEach((path,i)=>path.style.strokeDashoffset=100-100*botanicalEase(clamp01((time-i*120)/1250)));
-  leaves.forEach((group,i)=>{
-   const t=botanicalEase(clamp01((time-300-i*120)/1050));group.style.opacity=String(clamp01((time-300-i*120)/300));group.querySelector('.leaf-blade').setAttribute('d',leafShape(t));group.querySelector('.leaf-nerves').style.opacity=String(t*.56);
-   group.querySelector('.magnolia-leaf-flex').style.transform=`rotate(${(1-t)*Math.sin(t*4)*2.2}deg)`;
-  });
-  petals.forEach(({group,spec,shape,vein})=>{
-   const t=botanicalEase(clamp01((time-spec.delay)/1450));group.style.opacity=String(clamp01((time-spec.delay+170)/480));group.setAttribute('transform',`rotate(${spec.r*t})`);group.querySelectorAll('.petal-surface,.petal-fold').forEach(path=>path.setAttribute('d',shape(t)));group.querySelector('.petal-vein').setAttribute('d',vein(t));
-  });
-  host.querySelector('.magnolia-heart').style.opacity=String(clamp01((time-2450)/950));
-  host.style.setProperty('--bloom-light',String(.13+.1*botanicalEase(clamp01(time/3600))));
+function corollaPart(d,angle=0,tone='ivory',delay=0,turn=8){return {d,closed:foldedDrawing(d,tone),angle,tone,delay,turn}}
+const FLOWER_COLLECTION={
+ hads:{name:'Белая камелия',latin:'Camellia japonica',kind:'camellia',tilt:-8,base:5,parts:(()=>{
+  const out=[],form='M0 10 C-35 5 -58 -32 -47 -54 C-36 -78 -3 -87 21 -72 C53 -57 48 -14 0 10 Z';
+  for(let ring=0;ring<3;ring++){const count=[8,7,5][ring],size=[1,.74,.47][ring];for(let i=0;i<count;i++)out.push(corollaPart(scaledDrawing(form,size*(1+(i%3-1)*.035),size),i*360/count+ring*22+(i%2?2:-2),ring===0?'ivory':'pearl',ring*180+i*25,6-ring*2))}
+  return out;
+ })()},
+ aq10:{name:'Светло-сиреневый ирис',latin:'Iris pallida',kind:'iris',tilt:6,base:42,parts:[
+  corollaPart('M0 8 C-19 -8 -42 -51 -25 -79 C-8 -95 18 -81 26 -64 C37 -36 15 -9 0 8 Z',-24,'lilac',0,-9),
+  corollaPart('M0 8 C-13 -18 -15 -76 6 -92 C28 -99 43 -68 37 -48 C30 -20 11 -7 0 8 Z',19,'iris',90,10),
+  corollaPart('M0 8 C-32 -7 -45 -42 -32 -66 C-12 -80 8 -55 11 -38 C16 -16 7 -2 0 8 Z',-54,'lilac',165,-8),
+  corollaPart('M0 2 C-30 2 -70 7 -79 34 C-81 64 -45 77 -22 60 C-4 49 5 23 0 2 Z',5,'iris',270,-9),
+  corollaPart('M0 2 C20 -6 63 -2 75 24 C88 51 59 65 36 53 C13 44 3 22 0 2 Z',-4,'lilac',345,8),
+  corollaPart('M0 2 C-13 8 -31 37 -24 67 C-9 94 22 82 32 62 C43 37 16 8 0 2 Z',-6,'iris',430,5)
+ ]},
+ asrs5:{name:'Белая калла',latin:'Zantedeschia aethiopica',kind:'calla',tilt:-10,base:29,parts:[
+  corollaPart('M0 29 C-52 1 -70 -94 -21 -109 C21 -129 57 -79 66 -119 C95 -39 42 3 0 29 Z',0,'calla',0,-8),
+  corollaPart('M2 25 C23 3 31 -33 19 -58 C41 -35 62 -51 66 -119 C88 -51 52 6 2 25 Z',0,'pearl',330,5)
+ ]},
+ bis:{name:'Кремовый ранункулюс',latin:'Ranunculus asiaticus',kind:'ranunculus',tilt:12,base:4,parts:(()=>{
+  const out=[],form='M0 10 C-30 12 -51 -23 -39 -48 C-23 -68 7 -79 28 -61 C49 -42 36 -6 0 10 Z';
+  for(let ring=0;ring<4;ring++){const n=[10,10,9,7][ring],size=[1,.78,.54,.31][ring];for(let i=0;i<n;i++)out.push(corollaPart(scaledDrawing(form,size*(1+Math.sin(i*2.7)*.025),size),i*360/n+ring*18,ring<2?'cream':'butter',ring*115+i*18,4-ring))}
+  return out;
+ })()},
+ hcl8:{name:'Белый тюльпан',latin:'Tulipa',kind:'tulip',tilt:-15,base:39,parts:[
+  corollaPart('M0 39 C-36 30 -64 -33 -45 -79 C-30 -98 -7 -104 0 -89 C17 -45 20 18 0 39 Z',0,'pearl',0,-7),
+  corollaPart('M0 39 C-8 0 5 -84 39 -98 C67 -80 64 -20 46 6 C31 30 12 37 0 39 Z',0,'ivory',100,8),
+  corollaPart('M0 39 C-14 2 -30 -72 -9 -104 C16 -117 34 -86 29 -63 C35 -24 16 27 0 39 Z',0,'ivory',180,3),
+  corollaPart('M0 39 C-34 33 -68 -20 -58 -61 C-39 -78 -6 -36 6 -3 C21 23 12 38 0 39 Z',0,'ivory',325,-6),
+  corollaPart('M0 39 C-8 15 10 -23 39 -59 C64 -70 67 -32 50 -7 C40 22 15 41 0 39 Z',0,'pearl',410,6),
+  corollaPart('M0 39 C-27 23 -31 -21 -12 -65 C4 -91 30 -49 31 -22 C37 13 19 36 0 39 Z',0,'ivory',510,2)
+ ]}
+};
+// У закрытых многолепестковых цветов компактная чашечка, у каллы — свёрнутое покрывало.
+Object.values(FLOWER_COLLECTION).forEach(flower=>flower.parts.forEach(p=>{p.closed=foldedDrawing(p.d,flower.kind)}));
+function collectionDefs(prefix){
+ const palettes={ivory:['#C6C8B1','#EEEEDE','#FFFEF4','#E1E3D1'],pearl:['#AEB99E','#E1E6D4','#FFFFF3','#D5DCC8'],cream:['#B9AD84','#E8DEC0','#FFFAE6','#E3D6B4'],butter:['#ADA77A','#DED5AD','#F7EED1','#D1CAA2'],lilac:['#69648B','#ABA3CB','#E0D9EE','#A79DC7'],iris:['#665A88','#A699C6','#D8D0E9','#9284B5'],calla:['#93A57E','#DCE4C9','#FFFFF4','#D3DCC0']};
+ return `<defs>${Object.entries(palettes).map(([name,c])=>`<linearGradient id="${prefix}-${name}" x1=".82" y1=".94" x2=".18" y2=".05"><stop stop-color="${c[0]}"/><stop offset=".28" stop-color="${c[1]}"/><stop offset=".65" stop-color="${c[2]}"/><stop offset="1" stop-color="${c[3]}"/></linearGradient>`).join('')}
+ <linearGradient id="${prefix}-foliage" x1=".07" y1=".7" x2=".95" y2=".2"><stop stop-color="#123E30"/><stop offset=".44" stop-color="#45765B"/><stop offset=".5" stop-color="#9DAE77"/><stop offset=".56" stop-color="#638463"/><stop offset="1" stop-color="#214F37"/></linearGradient>
+ <linearGradient id="${prefix}-stem" x1="0" x2="1"><stop stop-color="#4A6847"/><stop offset=".46" stop-color="#91A475"/><stop offset="1" stop-color="#486A48"/></linearGradient>
+ <linearGradient id="${prefix}-gold" x1="0" x2="1"><stop stop-color="#93864C"/><stop offset=".4" stop-color="#E4D198"/><stop offset="1" stop-color="#B3A060"/></linearGradient>
+ <filter id="${prefix}-paper" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="2" seed="14" result="noise"/><feColorMatrix in="noise" type="matrix" values="0 0 0 0 .32 0 0 0 0 .37 0 0 0 0 .24 0 0 0 .045 0" result="grain"/><feComposite in="grain" in2="SourceGraphic" operator="in" result="surface"/><feBlend in="SourceGraphic" in2="surface" mode="multiply"/></filter>
+ </defs>`;
+}
+function petalEngraving(part,kind){
+ const a=part.d.match(/-?\d*\.?\d+/g).map(Number),tip=[a[6],a[7]],veins=[];
+ for(let j=-2;j<=2;j++){
+  const shift=j*(kind==='iris'?5.1:3.2),x=tip[0]+shift*1.4,y=tip[1]+Math.abs(j)*2;
+  veins.push(`<path d="M${shift*.25} ${kind==='tulip'?25:4}C${x*.25+shift} ${y*.28} ${x*.78-shift*.5} ${y*.65} ${x*.9} ${y*.93}"/>`);
  }
- function tick(now){raf=0;if(disposed||document.hidden||reduce())return;if(started===null)started=now-elapsed;elapsed=now-started;paint(elapsed);if(elapsed<3650)raf=requestAnimationFrame(tick);else host.dataset.bloomSettled='true'}
- function stop(){cancelAnimationFrame(raf);raf=0;started=null}
- function resume(){if(disposed)return;if(reduce()){stop();elapsed=4000;paint(4000);host.dataset.bloomSettled='true';return}if(!document.hidden&&elapsed<3650&&!raf)raf=requestAnimationFrame(tick)}
- const skip=host.querySelector('.bloom-skip');
- function jump(event){event.preventDefault();stop();elapsed=4000;paint(4000);host.dataset.bloomSettled='true';const target=stage.querySelector('#results-summary');target.scrollIntoView({behavior:reduce()?'instant':'smooth',block:'start'});stage.querySelector('#screen-title').focus({preventScroll:true})}
- skip.addEventListener('click',jump);paint(0);resume();
- return {update(){if(document.hidden)stop();else resume();if(reduce()){stop();elapsed=4000;paint(4000);host.dataset.bloomSettled='true'}},dispose(){disposed=true;stop();skip.removeEventListener('click',jump)}};
+ return `<g fill="none" stroke="${kind==='iris'?'#6C5C92':'#78865C'}" stroke-width="${kind==='iris'?.6:.45}" stroke-opacity="${kind==='iris'?.3:.16}">${veins.join('')}</g>`;
 }
-function syncBloomStory(){const host=stage.querySelector('.bloom-story');if(host===bloomHost)return;bloomController?.dispose();bloomController=null;bloomHost=host;if(host)bloomController=createBloomStory(host)}
-function controlBotanicalMotion(){bloomController?.update();if(reduce()||document.hidden){stopBotanicMotions();stage.querySelectorAll('[data-scale-leaf]').forEach(group=>{delete group.dataset.growing});syncProgressBranch()}}
+function flowerHead(id,prefix,paintPrefix=prefix){
+ const flower=FLOWER_COLLECTION[id];
+ const parts=flower.parts.map((p,i)=>{
+  const cid=prefix+'-p'+i;
+  return `<g class="collection-petal" data-corolla-part="${i}" data-closed="${p.closed}" data-onset="${p.delay}" data-turn="${p.turn}" transform="rotate(${p.angle})"><clipPath id="${cid}"><path class="collection-clip" d="${p.d}"/></clipPath><path class="collection-surface" d="${p.d}" fill="url(#${paintPrefix}-${p.tone})" stroke="${flower.kind==='iris'?'#8E83AA':'#AFB49B'}" stroke-width=".45"/><g class="collection-etching" clip-path="url(#${cid})">${petalEngraving(p,flower.kind)}<path d="${p.d}" fill="none" stroke="#FFFFF7" stroke-opacity=".62" stroke-width="1.1" transform="translate(-.5 -.8)"/></g></g>`;
+ });
+ let heart='';
+ if(flower.kind==='camellia'){
+  heart='<g class="collection-heart">'+Array.from({length:36},(_,i)=>{const a=i*2.4,r=3+Math.sqrt(i)*1.8,x=Math.cos(a)*r,y=Math.sin(a)*r*.9;return `<path d="M${x*.4} ${y*.4+4}Q${x*.7} ${y-2} ${x} ${y-5}" fill="none" stroke="${i%3?'#BDA569':'#DFCB91'}" stroke-width=".9"/><ellipse cx="${x}" cy="${y-5}" rx="1.4" ry="2.1" fill="#CBB478" transform="rotate(${a*20} ${x} ${y-5})"/>`}).join('')+'</g>';
+ }
+ if(flower.kind==='ranunculus')heart='<g class="collection-heart" fill="#A6A474">'+Array.from({length:15},(_,i)=>{const a=i*2.4,r=Math.sqrt(i)*1.9;return `<path d="M0 2Q${Math.cos(a)*r} ${Math.sin(a)*r} ${Math.cos(a)*r*1.2} ${Math.sin(a)*r*1.2-2}" fill="none" stroke="#A1A06A" stroke-width=".75"/>`}).join('')+'</g>';
+ if(flower.kind==='iris')heart='<g class="collection-heart" fill="none" stroke-linecap="round">'+[-47,0,47].map((x,i)=>`<path d="M${x*.22} 9Q${x*.7} ${27-i*3} ${x} ${i===1?62:39}" stroke="#B9A26B" stroke-width="3"/><path d="M${x*.22+1} 9Q${x*.7+1} ${25-i*3} ${x+1} ${i===1?60:37}" stroke="#E2CF99" stroke-width="1.2"/>`).join('')+'</g>';
+ if(flower.kind==='calla'){
+  const spike=`<g class="collection-heart calla-spadix"><path d="M4 4C-1-18 0-54 6-67C11-74 18-68 18-57C18-35 16-11 13-2Z" fill="url(#${paintPrefix}-gold)" stroke="#B3A36C" stroke-width=".4"/>${Array.from({length:28},(_,i)=>{const x=5+(i%3)*3.3,y=-59+Math.floor(i/3)*5.8;return `<path d="M${x} ${y}l1.2 1.6" stroke="#8B8D55" stroke-opacity=".3" stroke-width=".7"/>`}).join('')}</g>`;
+  parts.splice(1,0,spike);
+ }
+ return `<g class="flower-head" data-flower-kind="${flower.kind}" filter="url(#${paintPrefix}-paper)">${parts.join('')}${heart}</g>`;
+}
+function engravedLeaf(d,veins,prefix){return `<path d="${d}" fill="url(#${prefix}-foliage)" stroke="#496D48" stroke-width=".5"/><g fill="none" stroke="#C7D1A0" stroke-opacity=".55" stroke-width=".65">${veins.map(v=>`<path d="${v}"/>`).join('')}</g>`}
+function specimenFoliage(id,prefix){
+ const flower=FLOWER_COLLECTION[id];
+ if(flower.kind==='camellia')return engravedLeaf('M155 234C127 236 91 214 78 181L85 181L81 174L90 177L88 170C123 176 154 200 155 234Z',['M155 234Q120 207 87 177','M140 221L128 187M128 211L111 181M133 216L101 210M119 205L89 195'],prefix)+engravedLeaf('M157 193C184 187 214 156 225 139C193 136 159 156 157 193Z',['M157 193Q190 164 225 139','M173 180L174 151M189 166L195 143M182 172L207 162'],prefix);
+ if(flower.kind==='iris')return engravedLeaf('M153 346C145 277 113 198 86 157C119 190 158 250 163 344Z',['M156 341Q141 248 89 161','M151 307Q129 229 104 190'],prefix)+engravedLeaf('M157 345C179 277 201 209 197 155C219 209 200 290 163 346Z',['M160 342Q202 232 198 161'],prefix);
+ if(flower.kind==='calla')return engravedLeaf('M156 287C131 262 89 258 77 227C90 223 112 215 119 190C151 202 173 245 156 287Z',['M156 287Q137 235 119 190','M143 255Q117 236 83 228','M148 266Q121 261 102 249','M136 237L136 216'],prefix)+engravedLeaf('M156 318C190 293 230 255 229 226C210 230 200 224 199 209C166 232 149 284 156 318Z',['M156 318Q191 259 199 209','M177 278L218 250','M183 262L218 231'],prefix);
+ if(flower.kind==='ranunculus')return engravedLeaf('M154 239C140 219 110 218 101 207L117 203C101 191 95 179 94 172C113 173 122 186 129 189C125 170 130 162 133 158C146 174 145 198 154 208C162 194 169 192 175 193C178 209 161 220 154 239Z',['M154 239Q142 205 133 161','M145 210Q124 190 96 173','M151 225Q135 217 106 207'],prefix)+engravedLeaf('M155 286C178 264 208 257 215 236L201 238C212 221 210 211 207 204C193 211 190 222 184 226L180 209C165 217 164 242 155 250Z',['M155 286Q180 248 208 207','M174 256L210 238','M180 245L181 215'],prefix);
+ return engravedLeaf('M148 341C122 307 91 260 105 204C116 187 123 169 124 155C147 199 137 258 148 341Z',['M148 341Q119 246 124 159','M140 303Q128 249 128 200'],prefix)+engravedLeaf('M152 341C188 310 221 264 220 203C208 239 171 257 161 283Z',['M152 341Q204 282 220 206','M172 316Q199 281 209 243'],prefix);
+}
+function specimenSVG(id){
+ const prefix='specimen-'+(++flowerSerial),flower=FLOWER_COLLECTION[id],angle=flower.tilt*Math.PI/180,base=flower.base-3,joinX=159-Math.sin(angle)*base,joinY=130+Math.cos(angle)*base;
+ return `<svg class="specimen-art" viewBox="0 0 320 370" role="img" aria-label="${flower.name}">${collectionDefs(prefix)}<g class="specimen-plant"><path class="collection-stem" pathLength="100" d="M156 345C151 276 161 223 ${joinX.toFixed(2)} ${joinY.toFixed(2)}" stroke="url(#${prefix}-stem)" stroke-width="3" fill="none" stroke-linecap="round"/><g class="specimen-foliage">${specimenFoliage(id,prefix)}</g><g transform="translate(159 130) rotate(${flower.tilt})">${flowerHead(id,prefix)}</g></g></svg>`;
+}
+function botanical(id){return `<div class="flower-interlude" data-specimen="${id}" aria-hidden="true">${specimenSVG(id)}<span class="specimen-name">${FLOWER_COLLECTION[id].latin}</span></div>`}
+function bouquetSVG(){
+ const prefix='bouquet-'+(++flowerSerial);
+ const layout=[{id:'asrs5',x:300,y:144,s:.92,r:3},{id:'aq10',x:426,y:208,s:.94,r:8},{id:'hads',x:191,y:246,s:1.02,r:-16},{id:'hcl8',x:169,y:373,s:.89,r:-27},{id:'bis',x:429,y:344,s:.87,r:16}];
+ const vase='M259 472C257 510 226 543 231 605C235 666 267 712 319 714C382 714 414 681 411 623C409 565 371 513 381 472Z';
+ const stems=layout.map((l,i)=>{const base=(FLOWER_COLLECTION[l.id].base-3)*l.s,angle=l.r*Math.PI/180,joinX=l.x-Math.sin(angle)*base,joinY=l.y+Math.cos(angle)*base,ex=293+i*12;return `<path d="M${joinX.toFixed(2)} ${joinY.toFixed(2)}C${l.x+[-2,-29,21,18,-33][i]} ${l.y+110} ${275+i*16} 433 ${ex} 539"/>`}).join('');
+ return `<svg class="bouquet-art" viewBox="0 0 640 780" role="img" aria-label="Асимметричный букет: белая камелия, сиреневый ирис, белая калла, кремовый ранункулюс и белый тюльпан в прозрачной вазе с водой">${collectionDefs(prefix)}<defs>
+ <linearGradient id="${prefix}-glass" x1="0" y1=".1" x2="1" y2=".2"><stop stop-color="#A1B6A1" stop-opacity=".14"/><stop offset=".08" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".22" stop-color="#E8EEE3" stop-opacity=".05"/><stop offset=".52" stop-color="#FFFFFF" stop-opacity=".27"/><stop offset=".77" stop-color="#9DAF9D" stop-opacity=".16"/><stop offset=".93" stop-color="#FFFFFF" stop-opacity=".56"/><stop offset="1" stop-color="#597C67" stop-opacity=".2"/></linearGradient>
+ <linearGradient id="${prefix}-water" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#9CB5A3" stop-opacity=".12"/><stop offset=".66" stop-color="#ACC5AD" stop-opacity=".18"/><stop offset="1" stop-color="#4A715B" stop-opacity=".24"/></linearGradient>
+ <radialGradient id="${prefix}-floor"><stop stop-color="#234B39" stop-opacity=".18"/><stop offset=".5" stop-color="#31523C" stop-opacity=".08"/><stop offset="1" stop-color="#31523C" stop-opacity="0"/></radialGradient>
+ <clipPath id="${prefix}-vase"><path d="${vase}"/></clipPath><clipPath id="${prefix}-water-window"><path d="M190 530H450V730H190Z"/></clipPath>
+ </defs>
+ <ellipse class="bouquet-contact-shadow" cx="330" cy="726" rx="150" ry="23" fill="url(#${prefix}-floor)"/>
+ <g class="bouquet-stems" fill="none" stroke="url(#${prefix}-stem)" stroke-width="3.3" stroke-linecap="round">${stems}</g>
+ <g class="bouquet-foliage" transform="translate(165 233) rotate(-21) scale(.91)">${engravedLeaf('M0 0C-34 3-77-12-88-43C-49-57-10-25 0 0Z',['M0 0Q-44-24-86-43','M-19-10L-34-41M-35-19L-56-49M-25-13L-63-15M-47-27L-79-30'],prefix)}</g>
+ <g class="bouquet-foliage" transform="translate(346 416) rotate(42) scale(1.1)">${engravedLeaf('M0 0C-23-25-54-70-41-109C-12-88 9-40 0 0Z',['M0 0Q-22-57-41-106','M-13-32L-36-56M-22-58L-39-80'],prefix)}</g>
+ <g class="bouquet-foliage" transform="translate(319 461) rotate(-19)">${engravedLeaf('M0 0C26-24 63-38 70-79C37-75 9-38 0 0Z',['M0 0Q38-39 69-77','M25-30L28-58M43-47L42-67M34-40L59-48'],prefix)}</g>
+ ${layout.map((l,i)=>`<g class="bouquet-specimen" data-bouquet-flower="${l.id}" data-flower-offset="${i*185}" transform="translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})">${flowerHead(l.id,prefix+'-'+l.id,prefix)}</g>`).join('')}
+ <g clip-path="url(#${prefix}-vase)">
+ <path d="M200 530C265 533 347 533 440 530V730H200Z" fill="url(#${prefix}-water)"/>
+ <g clip-path="url(#${prefix}-water-window)" fill="none" stroke-linecap="round">
+ ${layout.map((l,i)=>`<path d="M${297+i*12} 529Q${289+i*12} 574 ${276+i*18} ${[680,658,688,667,675][i]}" stroke="#3E704C" stroke-opacity=".64" stroke-width="${3.6-i*.12}"/><path d="M${300+i*12} 530Q${292+i*12} 574 ${279+i*18} ${[680,658,688,667,675][i]}" stroke="#CBDBB4" stroke-opacity=".39" stroke-width="1"/>`).join('')}
+ <path d="M247 545Q303 531 396 552" fill="none" stroke="#E5F0D8" stroke-opacity=".5" stroke-width="2"/>
+ </g>
+ <path d="${vase}" fill="url(#${prefix}-glass)"/>
+ <ellipse class="bouquet-waterline" cx="320" cy="531" rx="77" ry="8" fill="#CDDDCB" fill-opacity=".12" stroke="#6C8C74" stroke-opacity=".3" stroke-width=".8"/>
+ <path class="bouquet-surface-glint" d="M251 530Q298 535 367 531" fill="none" stroke="#FFFFF7" stroke-opacity=".6" stroke-width="1.3"/>
+ <path d="M253 554C247 595 256 652 280 675" stroke="#FFFFFF" stroke-width="5" stroke-opacity=".49" fill="none" stroke-linecap="round"/>
+ <path d="M267 555C264 603 269 630 277 645M385 564C408 619 395 670 377 684" stroke="#FFFFFF" stroke-width="1.4" stroke-opacity=".5" fill="none"/>
+ <path d="M245 591C252 661 279 704 322 703C357 706 389 687 398 662" stroke="#5B7E66" stroke-opacity=".18" stroke-width="2.4" fill="none"/>
+ </g>
+ <path d="${vase}" fill="none" stroke="#64846D" stroke-opacity=".3" stroke-width=".9"/>
+ <ellipse cx="320" cy="472" rx="61" ry="8" fill="#EDF3E9" fill-opacity=".11" stroke="#73917B" stroke-opacity=".38" stroke-width="1.2"/>
+ <path d="M263 471C280 465 341 463 373 472" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.5"/>
+ <path d="M263 480Q264 503 255 521M377 480Q372 499 381 527" fill="none" stroke="#FFFFF5" stroke-opacity=".68" stroke-width="2.3"/>
+ </svg>`;
+}
+function bloomStory(){return `<section class="bloom-story collection-story" aria-labelledby="bloom-title"><div class="bloom-editorial"><div class="bloom-copy"><p class="bloom-kicker">Первый шаг <span aria-hidden="true">/</span> In bloom</p><div class="bloom-title-mask"><h2 class="bloom-title" id="bloom-title">Вы сделали<br>первый <em>шаг.</em></h2></div><p class="bloom-message">Вы уделили время своему психическому состоянию. Сохраните результаты обследования и обсудите их со специалистом.</p><a class="bloom-skip" href="#results-summary">Перейти к результатам <span aria-hidden="true">↘</span></a><p class="bloom-footnote">Внимание к себе — начало понимания.</p></div><div class="bloom-visual bouquet-visual">${bouquetSVG()}<span class="bloom-specimen bouquet-caption" aria-hidden="true">The first step <i>collection</i><span>Пять цветов · один первый шаг</span></span></div></div></section>`}
+// Один rAF на композицию, готовые интерполяторы и ссылки на узлы без поиска в кадре.
+function prepareFlowerMotion(host){
+ const groups=[...host.querySelectorAll('[data-flower-kind]')];
+ const parts=groups.flatMap(group=>{
+  const offset=Number(group.closest('[data-flower-offset]')?.dataset.flowerOffset||0);
+  return [...group.querySelectorAll('[data-corolla-part]')].map(part=>{
+   const surface=part.querySelector('.collection-surface'),clip=part.querySelector('.collection-clip'),etching=part.querySelector('.collection-etching');
+   const morph=pathBetween(part.dataset.closed,surface.getAttribute('d'));
+   return {part,surface,clip,etching,morph,offset:offset+Number(part.dataset.onset),turn:Number(part.dataset.turn),angle:Number(part.getAttribute('transform').match(/-?\d*\.?\d+/)[0]),last:-1};
+  });
+ });
+ const hearts=groups.flatMap(group=>[...group.querySelectorAll('.collection-heart')].map(node=>({node,offset:Number(group.closest('[data-flower-offset]')?.dataset.flowerOffset||0)})));
+ const stems=[...host.querySelectorAll('.collection-stem,.bouquet-stems')],foliage=[...host.querySelectorAll('.specimen-foliage,.bouquet-foliage')];
+ return ms=>{
+  parts.forEach(p=>{
+   const t=botanicalEase(clamp01((ms-p.offset)/1180));if(t===p.last)return;p.last=t;
+   const path=p.morph(t);p.surface.setAttribute('d',path);p.clip.setAttribute('d',path);p.etching.style.opacity=String(.1+.9*t);
+   p.part.setAttribute('transform',`rotate(${p.angle+p.turn*(1-t)*(1-t)})`);
+  });
+  hearts.forEach(h=>h.node.style.opacity=String(clamp01((ms-h.offset-320)/850)));
+  stems.forEach(node=>node.style.opacity=String(.55+.45*clamp01(ms/800)));
+  foliage.forEach(node=>node.style.opacity=String(.6+.4*clamp01(ms/1000)));
+ };
+}
+function createCollectionController(host,finale=false,fresh=true){
+ let raf=0,started=null,elapsed=fresh?0:4000,disposed=false;
+ const duration=finale?3500:1750,paintFlowers=prepareFlowerMotion(host),glint=host.querySelector('.bouquet-surface-glint'),waterline=host.querySelector('.bouquet-waterline');
+ function paint(ms){
+  const time=reduce()?4000:ms;paintFlowers(time);
+  if(finale){host.style.setProperty('--bloom-title-y',(24*(1-botanicalEase(clamp01((time-150)/950))))+'px');host.style.setProperty('--bloom-copy-opacity',String(clamp01(time/550)));host.style.setProperty('--bloom-light',String(.13+.1*clamp01(time/3500)));
+   const drift=Math.sin(time/520)*(1-clamp01(time/3500));if(glint)glint.style.transform=`translateY(${drift*.8}px)`;if(waterline)waterline.style.transform=`translateY(${drift*.5}px)`;
+  }
+ }
+ function stop(){cancelAnimationFrame(raf);raf=0;started=null}
+ function tick(now){raf=0;if(disposed||document.hidden||reduce())return;if(started===null)started=now-elapsed;elapsed=now-started;paint(elapsed);if(elapsed<duration)raf=requestAnimationFrame(tick);else{paint(4000);host.dataset.flowerSettled='true'}}
+ function update(){
+  if(disposed)return;if(reduce()){stop();elapsed=4000;paint(4000);host.dataset.flowerSettled='true';return}
+  if(document.hidden){stop();return}if(elapsed<duration&&!raf)raf=requestAnimationFrame(tick);
+ }
+ const skip=host.querySelector('.bloom-skip');
+ function jump(event){event.preventDefault();stop();elapsed=4000;paint(4000);host.dataset.flowerSettled='true';stage.querySelector('#results-summary').scrollIntoView({behavior:reduce()?'instant':'smooth',block:'start'});stage.querySelector('#screen-title').focus({preventScroll:true})}
+ skip?.addEventListener('click',jump);paint(elapsed);if(!fresh)host.dataset.flowerSettled='true';update();
+ return {update,dispose(){disposed=true;stop();skip?.removeEventListener('click',jump)}};
+}
+function syncBloomStory(){
+ const screen=stage.lastElementChild,host=screen?.querySelector('.bloom-story')||null,specimen=screen?.querySelector('.flower-interlude')||null;
+ if(host!==bloomHost){bloomController?.dispose();bloomController=null;bloomHost=host;if(host)bloomController=createCollectionController(host,true,true)}
+ if(specimen!==interludeHost){interludeController?.dispose();interludeController=null;interludeHost=specimen;if(specimen){const id=specimen.dataset.specimen,fresh=!seenFlowers.has(id);seenFlowers.add(id);interludeController=createCollectionController(specimen,false,fresh)}}
+}
+function controlBotanicalMotion(){
+ bloomController?.update();interludeController?.update();if(reduce()||document.hidden){stopBotanicMotions();stage.querySelectorAll('[data-scale-leaf]').forEach(group=>{delete group.dataset.growing});syncProgressBranch()}
+}
 
 const formatScore=(value,decimals=2)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:decimals}).format(value);
 const isDemo=()=>scales.some(q=>readiness(q));
@@ -2043,7 +2181,7 @@ async function copyResults(text=reportText()){
   if(!copied){const area=document.createElement('textarea');area.value=text;area.setAttribute('aria-label','Текст результатов');area.style.cssText='position:fixed;left:0;top:0;opacity:0;pointer-events:none';document.body.append(area);area.focus();area.select();area.setSelectionRange(0,area.value.length);try{copied=document.execCommand('copy')}catch{}area.remove();previous?.focus({preventScroll:true});}
   if(copied)toast('Скопировано');else{const panel=document.getElementById('copy-panel'),area=document.getElementById('manual-copy');panel.hidden=false;area.value=text;area.focus();area.select();toast('Выделите и скопируйте текст вручную');}
 }
-function reset(){branchBirths.clear();stopBotanicMotions();state.resume=null;scales.forEach(q=>state.answers[q.id].fill(null));state.scale=0;state.item=0;state.screen='welcome';state.profile={sex:'',age:''};state.completedAt=null;}
+function reset(){seenFlowers.clear();branchBirths.clear();stopBotanicMotions();state.resume=null;scales.forEach(q=>state.answers[q.id].fill(null));state.scale=0;state.item=0;state.screen='welcome';state.profile={sex:'',age:''};state.completedAt=null;}
 // ==================== АНИМАЦИИ ====================
 function animateResults(){
   const data=results(),pending=new Set();
