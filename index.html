@@ -348,6 +348,40 @@ html.calm .young-leaf-unfurl,html.calm .quote-twig,html.calm .window-shadow{anim
 .calm .flower-interlude *,.calm .bouquet-art *{animation:none!important;transition:none!important}
 @media print{.flower-interlude,.collection-story{display:none!important}}
 
+/* Утренний натюрморт: свободное пространство, стекло и спокойная глубина. */
+.ikebana-story{background:linear-gradient(112deg,#F3F5EC94,#E8EEE28C)}
+.ikebana-story .bloom-editorial{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);min-height:min(810px,91svh);gap:8px;padding-top:34px;padding-bottom:28px}
+.ikebana-story .bouquet-visual{min-height:650px;padding-bottom:30px}
+.ikebana-art{width:116%;margin-left:-3%;height:auto;filter:none;overflow:visible}
+.ikebana-story .bloom-copy{padding-bottom:28px}.ikebana-story .bloom-title{font-size:clamp(42px,5.3vw,73px)}
+.ikebana-story .bouquet-caption{bottom:0;left:31%;font-size:11px;color:#65765D}.ikebana-story .bouquet-caption>span{font-size:7px;letter-spacing:.12em}
+.ikebana-stem,.ikebana-stem-vein{stroke-dasharray:100;stroke-dashoffset:0}
+.ikebana-plant{transform-box:view-box;transform-origin:var(--plant-root);will-change:auto}
+.ikebana-art .collection-surface{stroke-width:.38}.ikebana-art .collection-etching{mix-blend-mode:normal}
+.ikebana-art .flower-head{filter:none}
+/* Только уже раскрытая сцена. Геометрия цветка после 4,5 секунды статична. */
+.ikebana-story[data-flower-settled="true"] .ikebana-plant{animation:ikebana-breath var(--plant-period) ease-in-out infinite}
+.ikebana-story[data-flower-settled="true"] .ikebana-glass-sheen{animation:ikebana-reflection 28s ease-in-out infinite alternate}
+.ikebana-story[data-flower-settled="true"] .ikebana-caustic{animation:ikebana-caustic-light 31s ease-in-out infinite alternate}
+.ikebana-story[data-flower-settled="true"] .ikebana-morning-light{animation:ikebana-morning 34s ease-in-out infinite alternate}
+.ikebana-story[data-ikebana-paused="true"] *,.paused .ikebana-story *{animation-play-state:paused!important}
+.ikebana-story[data-ikebana-static="true"] .ikebana-plant,.ikebana-story[data-ikebana-static="true"] .ikebana-glass-sheen,.ikebana-story[data-ikebana-static="true"] .ikebana-caustic,.ikebana-story[data-ikebana-static="true"] .ikebana-morning-light{animation:none!important}
+@keyframes ikebana-breath{0%,100%{transform:rotate(0deg)}36%{transform:rotate(var(--plant-sway))}74%{transform:rotate(var(--plant-counter))}}
+@keyframes ikebana-reflection{from{opacity:.58}to{opacity:.92}}
+@keyframes ikebana-caustic-light{from{opacity:.45;transform:translateX(-1px)}to{opacity:.72;transform:translateX(2px)}}
+@keyframes ikebana-morning{from{opacity:.57}to{opacity:.8}}
+@media(max-width:760px){
+ .ikebana-story .bloom-editorial{grid-template-columns:1fr;gap:0;min-height:0;padding-top:34px;padding-bottom:26px}
+ .ikebana-story .bloom-copy{padding-bottom:0}.ikebana-story .bloom-title{font-size:clamp(39px,10.9vw,65px)}
+ .ikebana-story .bouquet-visual{height:clamp(410px,120vw,540px);min-height:0;padding-bottom:27px;margin-top:12px}
+ .ikebana-art{width:100%;height:100%;max-width:500px;margin-left:0;flex:initial}
+ .ikebana-story .bouquet-caption{left:auto;right:9px;bottom:0;font-size:10px}.ikebana-story .bouquet-caption>span{font-size:6.5px;letter-spacing:.09em}
+}
+@media(max-width:360px){.ikebana-story .bloom-title{font-size:38px}.ikebana-story .bouquet-visual{height:390px}.ikebana-story .bouquet-caption{font-size:9px;right:0}}
+@media(prefers-reduced-motion:reduce){.ikebana-story *{animation:none!important;transition:none!important}}
+.calm .ikebana-story *{animation:none!important;transition:none!important}
+@media print{.ikebana-story{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -1704,8 +1738,9 @@ const clamp01=t=>Math.max(0,Math.min(1,t));
 const LEAF_CLOSED='M0 0 C-2 -4 -2 -9 0 -13 C3 -9 3 -4 0 0 Z';
 const LEAF_OPEN='M0 0 C-11 -8 -17 -24 -8 -42 C8 -37 17 -12 0 0 Z';
 function pathBetween(from,to){
- const nums=from.match(/-?\d*\.?\d+/g).map(Number),target=to.match(/-?\d*\.?\d+/g).map(Number);
- return t=>{let i=0;return to.replace(/-?\d*\.?\d+/g,()=>{const n=nums[i]+(target[i]-nums[i])*t;i++;return n.toFixed(2)})};
+ const number=/-?\d*\.?\d+/g,origin=from.match(number).map(Number),target=to.match(number).map(Number),tokens=to.split(number),delta=target.map((n,i)=>n-origin[i]);
+ // Формат пути разбирается один раз; в кадре нет регулярных выражений.
+ return t=>{let d=tokens[0];for(let i=0;i<origin.length;i++)d+=(origin[i]+delta[i]*t).toFixed(2)+tokens[i+1];return d};
 }
 const leafShape=pathBetween(LEAF_CLOSED,LEAF_OPEN);
 function stopBotanicMotions(){for(const motion of botanicMotions)motion.stop();botanicMotions.clear()}
@@ -1807,8 +1842,7 @@ function petalEngraving(part,kind){
  }
  return `<g fill="none" stroke="${kind==='iris'?'#6C5C92':'#78865C'}" stroke-width="${kind==='iris'?.6:.45}" stroke-opacity="${kind==='iris'?.3:.16}">${veins.join('')}</g>`;
 }
-function flowerHead(id,prefix,paintPrefix=prefix){
- const flower=FLOWER_COLLECTION[id];
+function flowerHead(id,prefix,paintPrefix=prefix,flower=FLOWER_COLLECTION[id]){
  const parts=flower.parts.map((p,i)=>{
   const cid=prefix+'-p'+i;
   return `<g class="collection-petal" data-corolla-part="${i}" data-closed="${p.closed}" data-onset="${p.delay}" data-turn="${p.turn}" transform="rotate(${p.angle})"><clipPath id="${cid}"><path class="collection-clip" d="${p.d}"/></clipPath><path class="collection-surface" d="${p.d}" fill="url(#${paintPrefix}-${p.tone})" stroke="${flower.kind==='iris'?'#8E83AA':'#AFB49B'}" stroke-width=".45"/><g class="collection-etching" clip-path="url(#${cid})">${petalEngraving(p,flower.kind)}<path d="${p.d}" fill="none" stroke="#FFFFF7" stroke-opacity=".62" stroke-width="1.1" transform="translate(-.5 -.8)"/></g></g>`;
@@ -1839,52 +1873,171 @@ function specimenSVG(id){
  return `<svg class="specimen-art" viewBox="0 0 320 370" role="img" aria-label="${flower.name}">${collectionDefs(prefix)}<g class="specimen-plant"><path class="collection-stem" pathLength="100" d="M156 345C151 276 161 223 ${joinX.toFixed(2)} ${joinY.toFixed(2)}" stroke="url(#${prefix}-stem)" stroke-width="3" fill="none" stroke-linecap="round"/><g class="specimen-foliage">${specimenFoliage(id,prefix)}</g><g transform="translate(159 130) rotate(${flower.tilt})">${flowerHead(id,prefix)}</g></g></svg>`;
 }
 function botanical(id){return `<div class="flower-interlude" data-specimen="${id}" aria-hidden="true">${specimenSVG(id)}<span class="specimen-name">${FLOWER_COLLECTION[id].latin}</span></div>`}
-function bouquetSVG(){
- const prefix='bouquet-'+(++flowerSerial);
- const layout=[{id:'asrs5',x:300,y:144,s:.92,r:3},{id:'aq10',x:426,y:208,s:.94,r:8},{id:'hads',x:191,y:246,s:1.02,r:-16},{id:'hcl8',x:169,y:373,s:.89,r:-27},{id:'bis',x:429,y:344,s:.87,r:16}];
- const vase='M259 472C257 510 226 543 231 605C235 666 267 712 319 714C382 714 414 681 411 623C409 565 371 513 381 472Z';
- const stems=layout.map((l,i)=>{const base=(FLOWER_COLLECTION[l.id].base-3)*l.s,angle=l.r*Math.PI/180,joinX=l.x-Math.sin(angle)*base,joinY=l.y+Math.cos(angle)*base,ex=293+i*12;return `<path d="M${joinX.toFixed(2)} ${joinY.toFixed(2)}C${l.x+[-2,-29,21,18,-33][i]} ${l.y+110} ${275+i*16} 433 ${ex} 539"/>`}).join('');
- return `<svg class="bouquet-art" viewBox="0 0 640 780" role="img" aria-label="Асимметричный букет: белая камелия, сиреневый ирис, белая калла, кремовый ранункулюс и белый тюльпан в прозрачной вазе с водой">${collectionDefs(prefix)}<defs>
- <linearGradient id="${prefix}-glass" x1="0" y1=".1" x2="1" y2=".2"><stop stop-color="#A1B6A1" stop-opacity=".14"/><stop offset=".08" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".22" stop-color="#E8EEE3" stop-opacity=".05"/><stop offset=".52" stop-color="#FFFFFF" stop-opacity=".27"/><stop offset=".77" stop-color="#9DAF9D" stop-opacity=".16"/><stop offset=".93" stop-color="#FFFFFF" stop-opacity=".56"/><stop offset="1" stop-color="#597C67" stop-opacity=".2"/></linearGradient>
- <linearGradient id="${prefix}-water" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#9CB5A3" stop-opacity=".12"/><stop offset=".66" stop-color="#ACC5AD" stop-opacity=".18"/><stop offset="1" stop-color="#4A715B" stop-opacity=".24"/></linearGradient>
- <radialGradient id="${prefix}-floor"><stop stop-color="#234B39" stop-opacity=".18"/><stop offset=".5" stop-color="#31523C" stop-opacity=".08"/><stop offset="1" stop-color="#31523C" stop-opacity="0"/></radialGradient>
- <clipPath id="${prefix}-vase"><path d="${vase}"/></clipPath><clipPath id="${prefix}-water-window"><path d="M190 530H450V730H190Z"/></clipPath>
- </defs>
- <ellipse class="bouquet-contact-shadow" cx="330" cy="726" rx="150" ry="23" fill="url(#${prefix}-floor)"/>
- <g class="bouquet-stems" fill="none" stroke="url(#${prefix}-stem)" stroke-width="3.3" stroke-linecap="round">${stems}</g>
- <g class="bouquet-foliage" transform="translate(165 233) rotate(-21) scale(.91)">${engravedLeaf('M0 0C-34 3-77-12-88-43C-49-57-10-25 0 0Z',['M0 0Q-44-24-86-43','M-19-10L-34-41M-35-19L-56-49M-25-13L-63-15M-47-27L-79-30'],prefix)}</g>
- <g class="bouquet-foliage" transform="translate(346 416) rotate(42) scale(1.1)">${engravedLeaf('M0 0C-23-25-54-70-41-109C-12-88 9-40 0 0Z',['M0 0Q-22-57-41-106','M-13-32L-36-56M-22-58L-39-80'],prefix)}</g>
- <g class="bouquet-foliage" transform="translate(319 461) rotate(-19)">${engravedLeaf('M0 0C26-24 63-38 70-79C37-75 9-38 0 0Z',['M0 0Q38-39 69-77','M25-30L28-58M43-47L42-67M34-40L59-48'],prefix)}</g>
- ${layout.map((l,i)=>`<g class="bouquet-specimen" data-bouquet-flower="${l.id}" data-flower-offset="${i*185}" transform="translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})">${flowerHead(l.id,prefix+'-'+l.id,prefix)}</g>`).join('')}
- <g clip-path="url(#${prefix}-vase)">
- <path d="M200 530C265 533 347 533 440 530V730H200Z" fill="url(#${prefix}-water)"/>
- <g clip-path="url(#${prefix}-water-window)" fill="none" stroke-linecap="round">
- ${layout.map((l,i)=>`<path d="M${297+i*12} 529Q${289+i*12} 574 ${276+i*18} ${[680,658,688,667,675][i]}" stroke="#3E704C" stroke-opacity=".64" stroke-width="${3.6-i*.12}"/><path d="M${300+i*12} 530Q${292+i*12} 574 ${279+i*18} ${[680,658,688,667,675][i]}" stroke="#CBDBB4" stroke-opacity=".39" stroke-width="1"/>`).join('')}
- <path d="M247 545Q303 531 396 552" fill="none" stroke="#E5F0D8" stroke-opacity=".5" stroke-width="2"/>
- </g>
- <path d="${vase}" fill="url(#${prefix}-glass)"/>
- <ellipse class="bouquet-waterline" cx="320" cy="531" rx="77" ry="8" fill="#CDDDCB" fill-opacity=".12" stroke="#6C8C74" stroke-opacity=".3" stroke-width=".8"/>
- <path class="bouquet-surface-glint" d="M251 530Q298 535 367 531" fill="none" stroke="#FFFFF7" stroke-opacity=".6" stroke-width="1.3"/>
- <path d="M253 554C247 595 256 652 280 675" stroke="#FFFFFF" stroke-width="5" stroke-opacity=".49" fill="none" stroke-linecap="round"/>
- <path d="M267 555C264 603 269 630 277 645M385 564C408 619 395 670 377 684" stroke="#FFFFFF" stroke-width="1.4" stroke-opacity=".5" fill="none"/>
- <path d="M245 591C252 661 279 704 322 703C357 706 389 687 398 662" stroke="#5B7E66" stroke-opacity=".18" stroke-width="2.4" fill="none"/>
- </g>
- <path d="${vase}" fill="none" stroke="#64846D" stroke-opacity=".3" stroke-width=".9"/>
- <ellipse cx="320" cy="472" rx="61" ry="8" fill="#EDF3E9" fill-opacity=".11" stroke="#73917B" stroke-opacity=".38" stroke-width="1.2"/>
- <path d="M263 471C280 465 341 463 373 472" fill="none" stroke="#FFFFFF" stroke-opacity=".8" stroke-width="1.5"/>
- <path d="M263 480Q264 503 255 521M377 480Q372 499 381 527" fill="none" stroke="#FFFFF5" stroke-opacity=".68" stroke-width="2.3"/>
- </svg>`;
+// ==================== УТРЕННИЙ НАТЮРМОРТ: ПЯТЬ ЦВЕТОВ ====================
+// Стебли имеют постоянные точки крепления и сохраняют порядок слева направо.
+// Поле depth определяет перекрытие, а не медицинские данные.
+const IKEBANA_LAYOUT=[
+ {id:'asrs5',x:356,y:151,s:.86,r:-6,root:350,end:351,cut:711,depth:0,onset:0,bloom:0,sway:.13,period:23},
+ {id:'aq10',x:482,y:260,s:.75,r:9,root:398,end:403,cut:704,depth:1,onset:80,bloom:155,sway:-.19,period:21},
+ {id:'hcl8',x:169,y:370,s:.87,r:-13,root:294,end:287,cut:717,depth:2,onset:150,bloom:120,sway:-.17,period:19},
+ {id:'hads',x:266,y:290,s:1.12,r:-11,root:320,end:317,cut:724,depth:3,onset:45,bloom:85,sway:.12,period:22},
+ {id:'bis',x:427,y:402,s:.93,r:9,root:377,end:381,cut:720,depth:4,onset:200,bloom:200,sway:.16,period:20}
+];
+const IKEBANA_HEADS=(()=>{
+ const heads=Object.fromEntries(Object.entries(FLOWER_COLLECTION).map(([id,f])=>[id,{...f,parts:f.parts.map(p=>({...p}))}]));
+ const camellia=[
+  'M0 9 C-26 16 -59 -13 -55 -43 C-48 -72 -12 -84 17 -70 C48 -57 44 -13 0 9 Z',
+  'M0 9 C-34 12 -54 -26 -39 -52 C-20 -76 12 -78 30 -54 C48 -28 24 -4 0 9 Z',
+  'M0 9 C-24 5 -53 -14 -48 -44 C-43 -66 -14 -87 13 -76 C42 -63 47 -19 0 9 Z'
+ ];
+ heads.hads.parts=[];
+ for(let ring=0;ring<3;ring++){const count=[7,8,6][ring],size=[1,.77,.48][ring];for(let i=0;i<count;i++){
+  const form=scaledDrawing(camellia[(i+ring)%3],size*(1+Math.sin(i*2.1)*.035),size*.91);
+  heads.hads.parts.push(corollaPart(form,i*360/count+ring*21+Math.sin(i)*3,ring===0?'ivory':'pearl',ring*145+i*21,5-ring));
+ }}
+ heads.aq10.parts=[
+  corollaPart('M0 5 C-21 -7 -56 -29 -52 -58 C-49 -85 -23 -72 -15 -54 C-2 -34 6 -10 0 5 Z',-9,'lilac',0,-7),
+  corollaPart('M0 5 C-18 -20 -21 -73 -1 -89 C20 -98 35 -65 27 -39 C22 -14 9 -2 0 5 Z',2,'iris',75,6),
+  corollaPart('M0 5 C6 -20 34 -67 57 -60 C77 -46 54 -22 35 -10 C19 -1 7 8 0 5 Z',4,'lilac',125,8),
+  corollaPart('M0 2 C-24 -5 -70 0 -78 28 C-85 53 -60 73 -39 57 C-13 39 -5 17 0 2 Z',-4,'iris',280,-6),
+  corollaPart('M0 2 C25 -2 67 2 74 28 C83 49 63 66 41 55 C19 43 4 20 0 2 Z',4,'lilac',335,6),
+  corollaPart('M0 2 C-18 10 -30 41 -18 70 C-5 93 20 84 30 64 C40 37 17 10 0 2 Z',-3,'iris',430,4)
+ ];
+ heads.asrs5.parts=[
+  corollaPart('M0 29 C-41 9 -69 -68 -39 -103 C-11 -133 29 -110 60 -127 C72 -76 49 -6 0 29 Z',0,'calla',0,-5),
+  corollaPart('M0 29 C17 10 25 -30 15 -57 C35 -38 56 -61 60 -127 C75 -73 49 -7 0 29 Z',0,'ivory',310,4),
+  corollaPart('M1 28 C20 10 54 -25 61 -72 C61 -39 44 -3 21 17 C13 23 5 29 1 28 Z',0,'pearl',400,2)
+ ];
+ const ranunculus=[
+  'M0 9 C-28 15 -52 -17 -42 -43 C-30 -66 1 -77 24 -63 C44 -46 35 -7 0 9 Z',
+  'M0 9 C-24 13 -49 -23 -33 -51 C-17 -68 15 -72 31 -49 C47 -25 24 -4 0 9 Z',
+  'M0 9 C-31 8 -52 -19 -39 -47 C-24 -71 6 -80 28 -58 C49 -39 31 -8 0 9 Z'
+ ];
+ heads.bis.parts=[];
+ for(let ring=0;ring<4;ring++){const count=[9,11,10,7][ring],size=[1,.79,.55,.31][ring];for(let i=0;i<count;i++)heads.bis.parts.push(corollaPart(scaledDrawing(ranunculus[(ring+i)%3],size,size*.9),i*360/count+ring*17+Math.sin(i*1.9)*2,ring<2?'cream':'butter',ring*105+i*18,3-ring*.5))}
+ heads.hcl8.parts=[
+  corollaPart('M0 39 C-29 26 -54 -31 -38 -78 C-25 -97 -10 -101 -2 -85 C14 -46 17 19 0 39 Z',0,'pearl',0,-4),
+  corollaPart('M0 39 C-7 5 3 -75 31 -98 C53 -89 58 -36 40 -3 C24 22 11 36 0 39 Z',0,'ivory',90,5),
+  corollaPart('M0 39 C-12 4 -27 -70 -9 -100 C12 -109 30 -79 26 -58 C29 -24 15 27 0 39 Z',0,'ivory',165,3),
+  corollaPart('M0 39 C-26 29 -54 -17 -48 -58 C-32 -74 -8 -38 5 -5 C16 21 12 36 0 39 Z',0,'ivory',315,-4),
+  corollaPart('M0 39 C-6 17 10 -21 34 -57 C55 -68 57 -32 44 -10 C33 17 15 39 0 39 Z',0,'pearl',395,5),
+  corollaPart('M0 39 C-21 26 -27 -19 -11 -63 C2 -86 25 -48 26 -21 C30 12 17 35 0 39 Z',0,'ivory',490,2)
+ ];
+ Object.values(heads).forEach(f=>f.parts.forEach(p=>p.closed=foldedDrawing(p.d,f.kind)));
+ return heads;
+})();
+function ikebanaStemGeometry(l){
+ const a=l.r*Math.PI/180,base=(FLOWER_COLLECTION[l.id].base-3)*l.s;
+ const head={x:l.x-Math.sin(a)*base,y:l.y+Math.cos(a)*base};
+ const root={x:l.root,y:565},dy=root.y-head.y;
+ // Контрольные точки ограничены коридором между основанием и цветком.
+ // При одинаковой высоте порядок стеблей не меняется: нет декоративных «иксов».
+ const c1={x:root.x+(head.x-root.x)*.22,y:root.y-dy*.36};
+ const c2={x:head.x+(root.x-head.x)*.14,y:head.y+dy*.31};
+ return {root,c1,c2,head,d:`M${root.x} ${root.y}C${c1.x.toFixed(2)} ${c1.y.toFixed(2)} ${c2.x.toFixed(2)} ${c2.y.toFixed(2)} ${head.x.toFixed(2)} ${head.y.toFixed(2)}`};
 }
-function bloomStory(){return `<section class="bloom-story collection-story" aria-labelledby="bloom-title"><div class="bloom-editorial"><div class="bloom-copy"><p class="bloom-kicker">Первый шаг <span aria-hidden="true">/</span> In bloom</p><div class="bloom-title-mask"><h2 class="bloom-title" id="bloom-title">Вы сделали<br>первый <em>шаг.</em></h2></div><p class="bloom-message">Вы уделили время своему психическому состоянию. Сохраните результаты обследования и обсудите их со специалистом.</p><a class="bloom-skip" href="#results-summary">Перейти к результатам <span aria-hidden="true">↘</span></a><p class="bloom-footnote">Внимание к себе — начало понимания.</p></div><div class="bloom-visual bouquet-visual">${bouquetSVG()}<span class="bloom-specimen bouquet-caption" aria-hidden="true">The first step <i>collection</i><span>Пять цветов · один первый шаг</span></span></div></div></section>`}
+function stemPoint(stem,t){const u=1-t;return {x:u*u*u*stem.root.x+3*u*u*t*stem.c1.x+3*u*t*t*stem.c2.x+t*t*t*stem.head.x,y:u*u*u*stem.root.y+3*u*u*t*stem.c1.y+3*u*t*t*stem.c2.y+t*t*t*stem.head.y}}
+function ikebanaFoliage(l,stem,prefix){
+ const at=t=>{const p=stemPoint(stem,t);return `${p.x.toFixed(2)} ${p.y.toFixed(2)}`};
+ const leaf=(t,r,scale,d,veins)=>`<g class="ikebana-leaf" transform="translate(${at(t)}) rotate(${r}) scale(${scale})">${engravedLeaf(d,veins,prefix)}</g>`;
+ if(l.id==='hads')return leaf(.58,-43,1,'M0 0C-15-3-29-24-24-50L-20-47L-21-53L-15-50L-15-56C8-46 16-15 0 0Z',['M0 0Q-4-29-15-53','M-3-13L-21-29M-6-27L-21-41M-2-13L7-30M-5-27L1-44']);
+ if(l.id==='aq10')return leaf(.25,24,1,'M0 0C-5-51-7-98-20-133C2-102 13-49 0 0Z',['M0 0Q2-72-20-130']);
+ if(l.id==='hcl8')return leaf(.27,-28,1,'M0 0C-24-31-31-74-17-113C-12-133-15-144-14-154C8-121 5-81-1-50C-5-29-4-12 0 0Z',['M0 0Q-16-83-14-150','M-4-21Q-7-72-9-108']);
+ if(l.id==='asrs5')return leaf(.19,-18,.77,'M0 0C-17-23-47-32-52-61C-38-63-22-74-18-99C8-78 17-28 0 0Z',['M0 0Q-10-57-18-96','M-8-31L-44-57M-11-53L-33-70M-8-31L6-57']);
+ return leaf(.45,35,.78,'M0 0C-15-10-34-7-41-18L-25-23C-39-34-39-46-38-51C-24-51-18-39-12-34L-13-55C2-48 2-29 5-21C12-32 20-33 23-32C25-18 12-8 0 0Z',['M0 0Q-4-27-13-51','M-3-17L-36-46M-3-14L-34-18']);
+}
+function bouquetSVG(){
+ const prefix='ikebana-'+(++flowerSerial),vase='M270 500C273 542 258 579 253 620C238 681 262 741 321 751C376 765 431 739 441 691C447 653 425 590 416 553C410 531 409 511 410 500Z';
+ const plants=IKEBANA_LAYOUT.map(l=>{
+  const stem=ikebanaStemGeometry(l);
+  return `<g class="ikebana-plant" data-bouquet-flower="${l.id}" data-plant-onset="${l.onset}" style="--plant-root:${l.root}px 565px;--plant-sway:${l.sway}deg;--plant-counter:${-l.sway*.55}deg;--plant-period:${l.period}s">
+   <g class="ikebana-stem-group" fill="none" stroke-linecap="round"><path class="ikebana-stem" pathLength="100" d="${stem.d}" stroke="url(#${prefix}-stem)" stroke-width="${l.id==='asrs5'?3.5:2.8}"/><path class="ikebana-stem-vein" pathLength="100" d="${stem.d}" stroke="#B9C6A0" stroke-opacity=".45" stroke-width=".65" transform="translate(-.55 0)"/>
+   <path class="ikebana-wet-stem" d="M${l.root} 565C${l.root+2} 590 ${l.end+1} 654 ${l.end} ${l.cut}" stroke="#466F50" stroke-opacity=".64" stroke-width="3.4"/>
+   <path d="M${l.root+.7} 565C${l.root+2.7} 590 ${l.end+1.7} 654 ${l.end+.7} ${l.cut}" stroke="#C6D4AF" stroke-opacity=".47" stroke-width=".8"/></g>
+   <g class="ikebana-foliage">${ikebanaFoliage(l,stem,prefix)}</g>
+   <g class="ikebana-head" data-flower-offset="${l.bloom}" transform="translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})">${flowerHead(l.id,prefix+'-'+l.id,prefix,IKEBANA_HEADS[l.id])}</g>
+  </g>`;
+ }).join('');
+ return `<svg class="bouquet-art ikebana-art" viewBox="0 0 680 820" role="img" aria-label="Асимметричный букет: белая камелия, сиреневый ирис, белая калла, кремовый ранункулюс и белый тюльпан в прозрачной вазе с водой">${collectionDefs(prefix)}<defs>
+  <linearGradient id="${prefix}-smoke" x1="0" y1=".1" x2="1" y2=".2"><stop stop-color="#6C8875" stop-opacity=".32"/><stop offset=".08" stop-color="#ACBDAC" stop-opacity=".16"/><stop offset=".25" stop-color="#E5EBDF" stop-opacity=".06"/><stop offset=".52" stop-color="#CFD9CA" stop-opacity=".11"/><stop offset=".78" stop-color="#748E78" stop-opacity=".21"/><stop offset=".95" stop-color="#B5C6B4" stop-opacity=".24"/><stop offset="1" stop-color="#496D57" stop-opacity=".32"/></linearGradient>
+  <linearGradient id="${prefix}-water" x1="0" y1="0" x2=".1" y2="1"><stop stop-color="#B8C8B6" stop-opacity=".13"/><stop offset=".7" stop-color="#9AAF98" stop-opacity=".16"/><stop offset="1" stop-color="#708B72" stop-opacity=".24"/></linearGradient>
+  <linearGradient id="${prefix}-base" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#DAE3D5" stop-opacity=".2"/><stop offset=".55" stop-color="#88A28B" stop-opacity=".3"/><stop offset="1" stop-color="#52745C" stop-opacity=".4"/></linearGradient>
+  <linearGradient id="${prefix}-shine" x1="0" x2="1"><stop stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".42" stop-color="#FFFFF5" stop-opacity=".35"/><stop offset=".6" stop-color="#FFFFF5" stop-opacity=".12"/><stop offset="1" stop-color="#FFFFF5" stop-opacity="0"/></linearGradient>
+  <radialGradient id="${prefix}-contact"><stop stop-color="#24472F" stop-opacity=".25"/><stop offset=".5" stop-color="#425C41" stop-opacity=".11"/><stop offset="1" stop-color="#425C41" stop-opacity="0"/></radialGradient>
+  <radialGradient id="${prefix}-caustic"><stop stop-color="#F8FAE9" stop-opacity=".42"/><stop offset=".55" stop-color="#DBE4C9" stop-opacity=".18"/><stop offset="1" stop-color="#DBE4C9" stop-opacity="0"/></radialGradient>
+  <linearGradient id="${prefix}-morning" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#F5F6E3" stop-opacity=".25"/><stop offset=".5" stop-color="#F5F6E3" stop-opacity=".05"/><stop offset="1" stop-color="#9FB39C" stop-opacity="0"/></linearGradient>
+  <clipPath id="${prefix}-vase"><path d="${vase}"/></clipPath>
+  <mask id="${prefix}-base-mask"><rect x="230" y="721" width="230" height="48" fill="white"/></mask>
+ </defs>
+ <path class="ikebana-morning-light" d="M135 33C286 14 481 118 572 364L615 754H171Z" fill="url(#${prefix}-morning)"/>
+ <g class="ikebana-ground"><ellipse cx="353" cy="760" rx="154" ry="23" fill="url(#${prefix}-contact)"/><ellipse class="ikebana-caustic" cx="438" cy="758" rx="114" ry="20" fill="url(#${prefix}-caustic)"/></g>
+ <g class="ikebana-glass-back"><path d="${vase}" fill="url(#${prefix}-smoke)" fill-opacity=".55"/><ellipse cx="340" cy="500" rx="70" ry="10" fill="none" stroke="#78907A" stroke-opacity=".28" stroke-width="1"/>
+ <path d="M253 565C285 571 371 570 431 563V760H247Z" fill="url(#${prefix}-water)" clip-path="url(#${prefix}-vase)"/></g>
+ ${plants}
+ <g class="ikebana-glass-front">
+ <g clip-path="url(#${prefix}-vase)">
+  <path d="${vase}" fill="url(#${prefix}-smoke)"/>
+  <path d="M258 618C248 688 275 738 325 740C374 744 417 723 432 682L450 768H245Z" fill="url(#${prefix}-base)" mask="url(#${prefix}-base-mask)"/>
+  <path class="ikebana-waterline" d="M266 565C287 554 392 554 419 564C393 575 287 575 266 565Z" fill="#D9E3D0" fill-opacity=".13" stroke="#6E8871" stroke-opacity=".3" stroke-width=".8"/>
+  <path d="M269 566Q331 572 414 565" fill="none" stroke="#FFFFEF" stroke-opacity=".53" stroke-width=".95"/>
+  <path d="M267 626C261 668 277 717 296 729" fill="none" stroke="#F9FBED" stroke-opacity=".4" stroke-width="3.7" stroke-linecap="round"/>
+  <path d="M275 624C271 661 280 693 287 706M421 627C437 680 413 725 393 737" fill="none" stroke="#F8FAED" stroke-opacity=".47" stroke-width="1.1"/>
+  <path class="ikebana-glass-sheen" d="M278 517C287 563 261 600 268 658C274 696 290 718 305 726L324 733C296 700 285 673 285 630C284 583 304 554 292 517Z" fill="url(#${prefix}-shine)"/>
+  <path d="M256 650C254 709 283 744 332 748C378 753 419 727 432 697" fill="none" stroke="#607E63" stroke-opacity=".27" stroke-width="2.3"/>
+ </g>
+ <path d="${vase}" fill="none" stroke="#607C64" stroke-opacity=".32" stroke-width=".9"/>
+ <path d="M270 502C276 535 263 565 258 591" fill="none" stroke="#FFFFF3" stroke-opacity=".56" stroke-width="1.7"/>
+ <path d="M409 503C405 532 419 563 423 591" fill="none" stroke="#DDE7D3" stroke-opacity=".59" stroke-width="1.6"/>
+ <ellipse cx="340" cy="501.5" rx="70" ry="9.5" fill="none" stroke="#56725C" stroke-opacity=".29" stroke-width="1.1"/>
+ <path d="M272 498C294 488 383 486 408 499" fill="none" stroke="#FBFCEE" stroke-opacity=".73" stroke-width="1.8"/>
+ <path d="M271 504C303 512 379 512 409 503" fill="none" stroke="#E7EDDC" stroke-opacity=".54" stroke-width="1.4"/>
+ </g></svg>`;
+}
+// Последовательность общая для сцены: стекло → стебли с бутонами → раскрытие.
+// После 4,5 с SVG-геометрия не пересчитывается; живое движение выполняет CSS.
+function createIkebanaController(host,fresh=true){
+ let raf=0,started=null,elapsed=fresh?0:4600,disposed=false,inView=true;
+ let lastGlass=-1,lastTitle=-1,lastCopy=-1;
+ const paintFlowers=prepareFlowerMotion(host,.78),glass=[...host.querySelectorAll('.ikebana-glass-back,.ikebana-glass-front')],ground=host.querySelector('.ikebana-ground');
+ const plants=[...host.querySelectorAll('.ikebana-plant')].map(node=>({node,onset:Number(node.dataset.plantOnset),stems:[...node.querySelectorAll('.ikebana-stem,.ikebana-stem-vein')],head:node.querySelector('.ikebana-head'),foliage:node.querySelector('.ikebana-foliage')}));
+ function paint(ms){
+  const time=reduce()?4600:ms,glassT=botanicalEase(clamp01(time/800));
+  const phase=time<800?'glass':time<2500?'formation':time<4500?'unfolding':'alive';if(host.dataset.scenePhase!==phase)host.dataset.scenePhase=phase;
+  if(glassT!==lastGlass){glass.forEach(node=>node.style.opacity=String(glassT));ground.style.opacity=String(glassT);lastGlass=glassT}
+  plants.forEach(p=>{
+   const formation=botanicalEase(clamp01((time-800-p.onset)/1350)),stem=botanicalEase(clamp01((time-850-p.onset)/1450));
+   if(p.formation!==formation){p.node.style.opacity=String(formation);p.formation=formation}
+   const head=botanicalEase(clamp01((time-1100-p.onset)/1250)),leaf=botanicalEase(clamp01((time-1150-p.onset)/1150));if(p.headAlpha!==head){p.head.style.opacity=String(head);p.headAlpha=head}if(p.leafAlpha!==leaf){p.foliage.style.opacity=String(leaf);p.leafAlpha=leaf}
+   if(p.stem!==stem){p.stems.forEach(path=>path.style.strokeDashoffset=String(100-stem*100));p.stem=stem}
+  });
+  paintFlowers(Math.max(0,time-2500));
+  const title=24*(1-botanicalEase(clamp01((time-100)/1000))),copy=clamp01(time/600);if(title!==lastTitle){host.style.setProperty('--bloom-title-y',title+'px');lastTitle=title}if(copy!==lastCopy){host.style.setProperty('--bloom-copy-opacity',String(copy));lastCopy=copy}
+ }
+ function stop(){cancelAnimationFrame(raf);raf=0;started=null}
+ function settle(){elapsed=4600;paint(4600);host.dataset.flowerSettled='true'}
+ function tick(now){raf=0;if(disposed||document.hidden||reduce()||!inView)return;if(started===null)started=now-elapsed;elapsed=now-started;paint(elapsed);if(elapsed<4500)raf=requestAnimationFrame(tick);else settle()}
+ function update(){
+  if(disposed)return;host.dataset.ikebanaPaused=String(document.hidden||!inView);host.dataset.ikebanaStatic=String(reduce());
+  if(reduce()){stop();settle();return}if(document.hidden||!inView){stop();return}if(elapsed<4500&&!raf)raf=requestAnimationFrame(tick);
+ }
+ const observer='IntersectionObserver' in window?new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;update()},{threshold:0}):null;
+ observer?.observe(host);
+ const skip=host.querySelector('.bloom-skip');
+ function jump(event){event.preventDefault();stop();settle();stage.querySelector('#results-summary').scrollIntoView({behavior:reduce()?'instant':'smooth',block:'start'});stage.querySelector('#screen-title').focus({preventScroll:true})}
+ skip?.addEventListener('click',jump);paint(elapsed);if(!fresh)settle();update();
+ return {update,dispose(){disposed=true;stop();observer?.disconnect();skip?.removeEventListener('click',jump)}};
+}
+
+function bloomStory(){return `<section class="bloom-story collection-story ikebana-story" aria-labelledby="bloom-title"><div class="bloom-editorial"><div class="bloom-copy"><p class="bloom-kicker">Первый шаг <span aria-hidden="true">/</span> In bloom</p><div class="bloom-title-mask"><h2 class="bloom-title" id="bloom-title">Вы сделали<br>первый <em>шаг.</em></h2></div><p class="bloom-message">Вы уделили время своему психическому состоянию. Сохраните результаты обследования и обсудите их со специалистом.</p><a class="bloom-skip" href="#results-summary">Перейти к результатам <span aria-hidden="true">↘</span></a><p class="bloom-footnote">Внимание к себе — начало понимания.</p></div><div class="bloom-visual bouquet-visual">${bouquetSVG()}<span class="bloom-specimen bouquet-caption" aria-hidden="true">The first step <i>collection</i><span>Пять цветов · один первый шаг</span></span></div></div></section>`}
 // Один rAF на композицию, готовые интерполяторы и ссылки на узлы без поиска в кадре.
-function prepareFlowerMotion(host){
+function prepareFlowerMotion(host,detailAt=0){
  const groups=[...host.querySelectorAll('[data-flower-kind]')];
  const parts=groups.flatMap(group=>{
   const offset=Number(group.closest('[data-flower-offset]')?.dataset.flowerOffset||0);
   return [...group.querySelectorAll('[data-corolla-part]')].map(part=>{
    const surface=part.querySelector('.collection-surface'),clip=part.querySelector('.collection-clip'),etching=part.querySelector('.collection-etching');
    const morph=pathBetween(part.dataset.closed,surface.getAttribute('d'));
-   return {part,surface,clip,etching,morph,offset:offset+Number(part.dataset.onset),turn:Number(part.dataset.turn),angle:Number(part.getAttribute('transform').match(/-?\d*\.?\d+/)[0]),last:-1};
+   return {part,surface,clip,etching,morph,offset:offset+Number(part.dataset.onset),turn:Number(part.dataset.turn),angle:Number(part.getAttribute('transform').match(/-?\d*\.?\d+/)[0]),last:-1,lastEtching:-1,lastTurn:Infinity};
   });
  });
  const hearts=groups.flatMap(group=>[...group.querySelectorAll('.collection-heart')].map(node=>({node,offset:Number(group.closest('[data-flower-offset]')?.dataset.flowerOffset||0)})));
@@ -1892,33 +2045,25 @@ function prepareFlowerMotion(host){
  return ms=>{
   parts.forEach(p=>{
    const t=botanicalEase(clamp01((ms-p.offset)/1180));if(t===p.last)return;p.last=t;
-   const path=p.morph(t);p.surface.setAttribute('d',path);p.clip.setAttribute('d',path);p.etching.style.opacity=String(.1+.9*t);
-   p.part.setAttribute('transform',`rotate(${p.angle+p.turn*(1-t)*(1-t)})`);
+   const path=p.morph(t);p.surface.setAttribute('d',path);
+   const detail=detailAt?clamp01((t-detailAt)/(1-detailAt)):.1+.9*t;if(detail>0)p.clip.setAttribute('d',path);if(detail!==p.lastEtching){p.etching.style.opacity=String(detail);p.lastEtching=detail}
+   const turn=p.angle+p.turn*(1-t)*(1-t);if(Math.abs(turn-p.lastTurn)>.025||t===1){p.part.setAttribute('transform',`rotate(${turn})`);p.lastTurn=turn}
   });
-  hearts.forEach(h=>h.node.style.opacity=String(clamp01((ms-h.offset-320)/850)));
+  hearts.forEach(h=>{const t=clamp01((ms-h.offset-320)/850);if(t!==h.last){h.node.style.opacity=String(t);h.last=t}});
   stems.forEach(node=>node.style.opacity=String(.55+.45*clamp01(ms/800)));
   foliage.forEach(node=>node.style.opacity=String(.6+.4*clamp01(ms/1000)));
  };
 }
 function createCollectionController(host,finale=false,fresh=true){
+ if(finale)return createIkebanaController(host,fresh);
  let raf=0,started=null,elapsed=fresh?0:4000,disposed=false;
- const duration=finale?3500:1750,paintFlowers=prepareFlowerMotion(host),glint=host.querySelector('.bouquet-surface-glint'),waterline=host.querySelector('.bouquet-waterline');
- function paint(ms){
-  const time=reduce()?4000:ms;paintFlowers(time);
-  if(finale){host.style.setProperty('--bloom-title-y',(24*(1-botanicalEase(clamp01((time-150)/950))))+'px');host.style.setProperty('--bloom-copy-opacity',String(clamp01(time/550)));host.style.setProperty('--bloom-light',String(.13+.1*clamp01(time/3500)));
-   const drift=Math.sin(time/520)*(1-clamp01(time/3500));if(glint)glint.style.transform=`translateY(${drift*.8}px)`;if(waterline)waterline.style.transform=`translateY(${drift*.5}px)`;
-  }
- }
+ const paintFlowers=prepareFlowerMotion(host);
+ function paint(ms){paintFlowers(reduce()?4000:ms)}
  function stop(){cancelAnimationFrame(raf);raf=0;started=null}
- function tick(now){raf=0;if(disposed||document.hidden||reduce())return;if(started===null)started=now-elapsed;elapsed=now-started;paint(elapsed);if(elapsed<duration)raf=requestAnimationFrame(tick);else{paint(4000);host.dataset.flowerSettled='true'}}
- function update(){
-  if(disposed)return;if(reduce()){stop();elapsed=4000;paint(4000);host.dataset.flowerSettled='true';return}
-  if(document.hidden){stop();return}if(elapsed<duration&&!raf)raf=requestAnimationFrame(tick);
- }
- const skip=host.querySelector('.bloom-skip');
- function jump(event){event.preventDefault();stop();elapsed=4000;paint(4000);host.dataset.flowerSettled='true';stage.querySelector('#results-summary').scrollIntoView({behavior:reduce()?'instant':'smooth',block:'start'});stage.querySelector('#screen-title').focus({preventScroll:true})}
- skip?.addEventListener('click',jump);paint(elapsed);if(!fresh)host.dataset.flowerSettled='true';update();
- return {update,dispose(){disposed=true;stop();skip?.removeEventListener('click',jump)}};
+ function tick(now){raf=0;if(disposed||document.hidden||reduce())return;if(started===null)started=now-elapsed;elapsed=now-started;paint(elapsed);if(elapsed<1750)raf=requestAnimationFrame(tick);else{paint(4000);host.dataset.flowerSettled='true'}}
+ function update(){if(disposed)return;if(reduce()){stop();elapsed=4000;paint(4000);host.dataset.flowerSettled='true';return}if(document.hidden){stop();return}if(elapsed<1750&&!raf)raf=requestAnimationFrame(tick)}
+ paint(elapsed);if(!fresh)host.dataset.flowerSettled='true';update();
+ return {update,dispose(){disposed=true;stop()}};
 }
 function syncBloomStory(){
  const screen=stage.lastElementChild,host=screen?.querySelector('.bloom-story')||null,specimen=screen?.querySelector('.flower-interlude')||null;
