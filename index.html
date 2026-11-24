@@ -281,6 +281,10 @@ html.calm .young-leaf-unfurl,html.calm .quote-twig,html.calm .window-shadow{anim
 /* Компактное авторство: один абзац, естественный перенос на телефоне. */
 .author-footer{display:block;margin:0;font-size:12px;line-height:1.8;color:var(--muted)}.author-footer p{font-size:inherit;line-height:inherit}.author-footer .author-name{white-space:nowrap}.author-footer span:last-child{text-align:left;margin-left:0}.author-footer a{font-size:inherit;font-weight:500;text-decoration:underline;text-decoration-color:#4E8F6B75;text-underline-offset:3px}.author-footer a:hover{text-decoration-color:currentColor}.footer-caution{color:var(--muted)}
 @media(max-width:760px){.author-footer{font-size:12px;line-height:1.9;padding-bottom:4px}}
+
+/* Размер частиц увеличен умеренно; количество ограничено пятью. */
+.selection-particle{width:22px;height:31px;margin:-15px 0 0 -11px}.selection-particle.effect-wind{width:24px;height:33px}.selection-particle.effect-orbit{width:18px;height:26px}.selection-particle.effect-bloom{width:19px;height:27px}.selection-particle.effect-water{width:28px;height:28px;margin:-14px}
+@media(max-width:760px){.selection-particle{width:19px;height:27px;margin:-13px 0 0 -9px}.selection-particle.effect-wind{width:21px;height:29px}.selection-particle.effect-orbit{width:17px;height:24px}.selection-particle.effect-bloom{width:18px;height:25px}.selection-particle.effect-water{width:25px;height:25px;margin:-12px}}
 </style>
 </head>
 <body>
@@ -1536,27 +1540,29 @@ function scoreHCL8(answers,q=QUESTIONNAIRES.hcl8){return compute(q,answers)[0]}
 // Семейства эффектов: несколько спокойных вариантов в каждом опроснике.
 function selectionPlan(scaleId,itemIndex,sequence){
   const modes={hads:'fall',aq10:'wind',asrs5:'orbit',bis:'water',hcl8:'bloom'};
-  return {mode:modes[scaleId]||'fall',variant:(itemIndex+sequence)%3,count:5,duration:1120};
+  return {mode:modes[scaleId]||'fall',variant:(itemIndex+sequence)%3,count:5,duration:1480,stagger:58};
 }
 function selectionKeyframes(mode,index,variant){
   const angle=index/5*Math.PI*2,side=variant===1?-1:1;
   let middle,end,rotation;
   if(mode==='fall'){
-    middle=[Math.sin(index*1.7+variant)*23,38+index*5];end=[Math.sin(index*2.2+variant)*35,85+index*10];rotation=90+index*38;
+    middle=[Math.sin(index*1.7+variant)*29,37+index*5];end=[Math.sin(index*2.2+variant)*47,94+index*9];rotation=65+index*23;
   }else if(mode==='wind'){
-    middle=[side*(38+index*9),-18+Math.sin(index+variant)*18];end=[side*(95+index*12),-50+index*17];rotation=side*(110+index*24);
+    middle=[side*(38+index*8),-24+Math.sin(index+variant)*17];end=[side*(102+index*11),-46+index*15];rotation=side*(78+index*19);
   }else if(mode==='orbit'){
-    middle=[Math.cos(angle+variant)*31,Math.sin(angle+variant)*20-10];end=[Math.cos(angle+variant+.8)*65,Math.sin(angle+variant+.8)*44-38];rotation=side*(100+index*35);
+    middle=[Math.cos(angle+variant)*38,Math.sin(angle+variant)*26-12];end=[Math.cos(angle+variant+.9)*70,Math.sin(angle+variant+.9)*46-32];rotation=side*(65+index*24);
   }else if(mode==='bloom'){
-    middle=[Math.cos(angle)*25,Math.sin(angle)*20-9];end=[Math.cos(angle)*52,Math.sin(angle)*40-30];rotation=index*65+variant*30;
+    middle=[Math.cos(angle)*32,Math.sin(angle)*24-12];end=[Math.cos(angle)*64,Math.sin(angle)*47-32];rotation=index*52+variant*25;
   }else{
-    return [{opacity:0,transform:'translate3d(0,0,0) scale(.35)'},{offset:.2,opacity:.35,transform:'translate3d(0,0,0) scale(.85)'},{opacity:0,transform:`translate3d(0,${index*2}px,0) scale(${2.2+index*.18})`}];
+    return [{opacity:0,transform:'translate3d(0,0,0) scale(.3)'},{offset:.24,opacity:.34,transform:'translate3d(0,0,0) scale(.9)'},{offset:.7,opacity:.16,transform:`translate3d(0,${index}px,0) scale(${1.6+index*.12})`},{opacity:0,transform:`translate3d(0,${index*2}px,0) scale(${2.3+index*.15})`}];
   }
+  const tilt=-22+index*11;
   return [
-    {opacity:0,transform:`translate3d(0,0,0) rotate(${-20+index*13}deg) scale(.55)`},
-    {offset:.2,opacity:.6,transform:`translate3d(${middle[0]*.3}px,${middle[1]*.3}px,0) rotate(${rotation*.12}deg) scale(.9)`},
-    {offset:.58,opacity:.42,transform:`translate3d(${middle[0]}px,${middle[1]}px,0) rotate(${rotation*.55}deg) scale(1)`},
-    {opacity:0,transform:`translate3d(${end[0]}px,${end[1]}px,0) rotate(${rotation}deg) scale(.7)`}
+    {opacity:0,transform:`translate3d(0,0,0) rotate(${tilt}deg) scale(.45)`},
+    {offset:.16,opacity:.64,transform:`translate3d(${middle[0]*.22}px,${middle[1]*.18}px,0) rotate(${tilt+rotation*.12}deg) scale(.92)`},
+    {offset:.48,opacity:.59,transform:`translate3d(${middle[0]}px,${middle[1]}px,0) rotate(${rotation*.45}deg) scale(1)`},
+    {offset:.76,opacity:.3,transform:`translate3d(${middle[0]+(end[0]-middle[0])*.68}px,${middle[1]+(end[1]-middle[1])*.58}px,0) rotate(${rotation*.8}deg) scale(.93)`},
+    {opacity:0,transform:`translate3d(${end[0]}px,${end[1]}px,0) rotate(${rotation}deg) scale(.74)`}
   ];
 }
 
@@ -1690,6 +1696,7 @@ function welcome(){return `<section class="screen" aria-labelledby="screen-title
    <linearGradient id="hero-pot" x1="0" x2="1"><stop stop-color="#AC7051"/><stop offset=".28" stop-color="#DCA886"/><stop offset=".58" stop-color="#C98F6B"/><stop offset="1" stop-color="#A96E50"/></linearGradient>
    <linearGradient id="hero-pot-rim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#E7BC9C"/><stop offset=".45" stop-color="#DCA582"/><stop offset="1" stop-color="#BC805F"/></linearGradient>
    <linearGradient id="hero-soil" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3C2D24"/><stop offset="1" stop-color="#66503B"/></linearGradient>
+   <clipPath id="hero-root-window"><rect x="146" y="386" width="108" height="33"/></clipPath>
    <filter id="hero-shadow-soft" x="-35%" y="-100%" width="170%" height="300%"><feGaussianBlur stdDeviation="9"/></filter>
    <radialGradient id="hero-ground"><stop stop-color="#173D2B" stop-opacity=".24"/><stop offset="1" stop-color="#173D2B" stop-opacity="0"/></radialGradient>
    <path id="hero-monstera" d="M0 0C-17-17-50-13-67-36C-76-49-80-65-76-82L-42-59-79-97C-79-115-72-130-62-142L-29-96-55-151C-43-167-23-176 0-185C25-175 42-161 53-145L28-106 62-131C74-117 80-100 78-83L40-62 75-69C72-44 59-27 38-19C22-13 8-14 0 0Z"/>
@@ -1710,9 +1717,10 @@ function welcome(){return `<section class="screen" aria-labelledby="screen-title
    <path d="M143 425Q142 445 157 470" fill="none" stroke="#E9C2A2" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
    <path d="M138 409L140 419C148 435 252 435 260 419L262 409Z" fill="url(#hero-pot-rim)" stroke="#BD8765" stroke-width=".7"/>
    <ellipse cx="200" cy="409" rx="62" ry="12" fill="#E7B99A"/><ellipse cx="200" cy="409" rx="54" ry="8" fill="url(#hero-soil)"/>
+   <g class="root-contact-shadows" fill="#201A14" opacity=".28"><ellipse cx="183" cy="413" rx="8" ry="2.2"/><ellipse cx="196" cy="414" rx="9" ry="2"/><ellipse cx="213" cy="413" rx="9" ry="2.2"/><ellipse cx="225" cy="412" rx="6" ry="1.8"/></g><g class="hero-root-connections" clip-path="url(#hero-root-window)" fill="none" stroke-linecap="round"><path d="M193 416C185 369 179 315 187 264" stroke="#3C7454" stroke-width="3.7"/><path d="M180 414C172 371 145 343 132 305" stroke="#315F45" stroke-width="4.3"/><path d="M210 415C218 365 239 318 263 289" stroke="#3C7454" stroke-width="3.1"/><path d="M195 414C177 399 154 379 133 369" stroke="#315F45" stroke-width="4.8"/><path d="M224 413C232 389 250 370 266 359" stroke="#4E8F6B" stroke-width="2.5"/></g><path d="M188 414Q187 402 184 397M202 414Q202 401 206 396" fill="none" stroke="#52764F" stroke-width="2" stroke-linecap="round"/><path d="M176 415q8-3 14 0l-1 2-14-1ZM191 416q8-3 14 0l-1 2-13-1ZM209 415q9-3 18-1l-1 2-15 1Z" fill="#69503B"/>
    <path d="M166 409q4-6 10-2l1 3-12 1ZM219 412q3-5 9-2l1 3-10 1Z" fill="#85705A"/><path d="M198 407q3-3 7-1l1 2-8 1Z" fill="#2F241D"/>
    <g fill="#D0B993"><circle cx="158" cy="407" r="1.1"/><circle cx="184" cy="412" r="1"/><circle cx="212" cy="405" r="1.2"/><circle cx="238" cy="410" r=".9"/><circle cx="195" cy="413" r=".8"/><circle cx="227" cy="405" r=".8"/></g>
-   <path d="M140 412C155 426 245 426 260 412" fill="none" stroke="#F0CFB1" stroke-width="1.5"/>
+   <path d="M140 412C155 426 245 426 260 412L260 419C252 435 148 435 140 419Z" fill="url(#hero-pot-rim)"/><path d="M140 412C155 426 245 426 260 412" fill="none" stroke="#F0CFB1" stroke-width="1.5"/>
    <path d="M173 475Q200 482 228 475" fill="none" stroke="#E2B290" stroke-opacity=".45"/>
   </g>
  </svg>
@@ -1911,22 +1919,24 @@ function petals(button){
  const plan=selectionPlan(scales[state.scale].id,state.item,selectionSequence++);
  if(!host||rect.bottom<0||rect.top>innerHeight)return;
  for(let i=0;i<plan.count;i++){
-  const node=document.createElement('span');node.className='selection-particle effect-'+plan.mode;
+  const node=document.createElement('span');node.className='selection-particle effect-'+plan.mode;node.setAttribute('aria-hidden','true');
   const water=plan.mode==='water';
-  const x=water?rect.right-38:rect.left+rect.width*(.25+i*.12);
-  const y=water?rect.top+rect.height/2:rect.top+rect.height*.55;
+  // Эффект начинается у края кнопки, оставляя её текст открытым.
+  const edgeLeft=plan.mode==='wind'&&plan.variant===1;
+  const x=water?rect.right-30:edgeLeft?rect.left+22+i*5:rect.right-24-i*6;
+  const y=water?rect.top+rect.height/2:rect.top+rect.height*(.35+(i%3)*.13);
   node.style.left=Math.max(20,Math.min(innerWidth-20,x))+'px';
   node.style.top=Math.max(12,Math.min(innerHeight-20,y))+'px';
-  node.style.color=['#548B60','#8CAB78','#3B7758','#779F69','#A0B77E'][(i+plan.variant)%5];
+  node.style.color=['#4E8F6B','#80A77C','#1F5A43','#73986B','#A9CDB4'][(i+plan.variant)%5];
   if(!water)node.innerHTML=selectionLeaf;
   host.append(node);
   if(typeof node.animate==='function'){
-   const animation=node.animate(selectionKeyframes(plan.mode,i,plan.variant),{duration:plan.duration,delay:i*32,easing:'cubic-bezier(.25,.8,.3,1)',fill:'both'});
+   const animation=node.animate(selectionKeyframes(plan.mode,i,plan.variant),{duration:plan.duration,delay:i*plan.stagger,easing:'cubic-bezier(.37,0,.32,1)',fill:'both'});
    selectionAnimations.add(animation);
    animation.finished.catch(()=>{}).finally(()=>{selectionAnimations.delete(animation);node.remove()});
   }else node.remove();
  }
- selectionTimer=setTimeout(clearSelectionEffects,plan.duration+200);
+ selectionTimer=setTimeout(clearSelectionEffects,plan.duration+(plan.count-1)*plan.stagger+120);
 }
 function ripple(event){if(reduce())return;const button=event.target.closest('.button,.answer,.motion');if(!button)return;const box=button.getBoundingClientRect(),node=document.createElement('span');node.className='ripple';node.setAttribute('aria-hidden','true');node.style.setProperty('--diameter',Math.max(box.width,box.height)*2+'px');node.style.setProperty('--rx',(event.detail?event.clientX-box.left:box.width/2)+'px');node.style.setProperty('--ry',(event.detail?event.clientY-box.top:box.height/2)+'px');button.append(node);setTimeout(()=>node.remove(),750);}
 const pollen=document.getElementById('pollen');for(let i=0;i<16;i++){const p=document.createElement('i');p.className='particle';p.style.cssText=`--x:${(i*6.7+3)%100}%;--size:${2+i%3}px;--duration:${22+i%5*3}s;--delay:${-i*3.2}s`;pollen.append(p)}
