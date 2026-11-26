@@ -11,7 +11,7 @@
 <meta name="referrer" content="no-referrer">
 <title>Первый шаг — опросники перед приёмом</title>
 <!-- Google Fonts используются только для типографики. Ответы никуда не передаются. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&amp;family=Onest:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&amp;family=Onest:wght@400;500;600;700&amp;display=swap">
 <style>
 /* Палитра, типографика и система движения */
 :root{--emerald:#0B3D2E;--forest:#1F6B4A;--grass:#3FA66B;--mint:#BFE8D0;--paper:#F2FAF5;--lime:#D8E86B;--ink:#163D30;--muted:#496658;--amber:#79521D;--amber-bg:#F7EACD;--ease-out:cubic-bezier(.22,1,.36,1);--ease-in-out:cubic-bezier(.65,0,.35,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);--t-fast:180ms;--t-base:420ms;--t-slow:800ms;--t-ambient:36s;--motion:1}
@@ -542,6 +542,38 @@ body[data-room="entry"] .nature>.entry-window{background:#f0ecdf}
 .entry-room .entry-photo{background-position:95% 87%;background-size:cover}
 @media(min-width:761px){.entry-room .welcome-copy{max-width:min(59%,760px)}.entry-room h1{font-size:clamp(48px,5.45vw,90px)}}
 @media(max-width:760px){.entry-room .entry-photo{height:clamp(170px,54vw,300px)}}
+/* Liquid Light — оптическая кромка отделена от неподвижного набора. */
+.liquid-light-quote {
+  position:relative; isolation:isolate; overflow:hidden; box-sizing:border-box;
+  width:min(57%,650px); margin:0; padding:28px 32px 28px 82px; border-radius:26px;
+  border:1px solid; border-color:#fff6dbae #b2987260 #e9d6acba #fff8dcbb;
+  background:var(--satin-grain) repeat,rgba(255,252,238,.075);
+  -webkit-backdrop-filter:blur(1.2px) saturate(.94); backdrop-filter:blur(1.2px) saturate(.94);
+  box-shadow:inset 0 1px 1px #fffdf6cb,inset 1.5px 0 2px #fff8dc93,inset -2px -2px 2px #a8977852,inset 0 -4px 4px #fff4d657,0 2px 3px #49391b16,0 9px 15px -9px #55452e57;
+}
+.liquid-light-quote::before,.liquid-light-quote::after,.liquid-light-quote .edge-light {
+  content:"";position:absolute;pointer-events:none;border-radius:inherit;
+}
+.liquid-light-quote::before {
+  inset:2px;border:1px solid;border-color:#fffbea94 #f7f0d541 #fff8daaa #e0f1ec48;
+  box-shadow:inset -1px 0 1px #c4cce946,inset 0 -1px 1px #ffd99c80;
+}
+.liquid-light-quote .edge-light {inset:0;padding:4px;opacity:.85;
+  background:radial-gradient(ellipse 16% 8px at 19% 100%,#fffde7 0%,#ffdb91aa 38%,transparent 100%),
+  radial-gradient(ellipse 23% 6px at 69% 0%,#fffef3 2%,#ffdfa5a8 40%,transparent 100%),
+  radial-gradient(ellipse 10% 18% at 96% 97%,#fff9dbb0,transparent 95%);
+  background-size:115% 100%;background-position:50% 50%;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+}
+.liquid-light-quote::after{inset:0;background:radial-gradient(ellipse 17% 11% at 18% 104%,#ffdea354,transparent),radial-gradient(ellipse 22% 16% at 87% -5%,#fff8e250,transparent)}
+.liquid-light-quote .opening-quote{position:absolute;left:28px;top:19px;font:80px/1 Georgia,serif;color:#a0ab8c;opacity:.79}
+.liquid-light-quote blockquote,.liquid-light-quote p{margin:0}
+.liquid-light-quote blockquote p{font:italic 500 clamp(26px,2.08vw,30px)/1.37 'Cormorant Garamond',Georgia,serif;color:#0c3b2e;letter-spacing:normal;text-wrap:pretty}
+.liquid-light-quote figcaption{display:flex;align-items:center;gap:13px;margin-top:15px;color:#344536;font:500 11px/1.4 Onest,Arial,sans-serif;letter-spacing:.19em}
+.liquid-light-quote figcaption::before{content:"";width:32px;height:1px;background:currentColor;opacity:.65}
+@media(max-width:760px){.liquid-light-quote{width:100%;grid-row:3;padding:24px 22px 24px 55px}.liquid-light-quote .opening-quote{left:15px;top:18px;font-size:58px}.liquid-light-quote blockquote p{font-size:clamp(22px,5.6vw,26px)}}
+@media print{.liquid-light-quote{display:none}}
 </style>
 </head>
 <body>
@@ -1842,7 +1874,7 @@ const esc=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','
 const arrow='<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
 const lock='<svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="9" width="12" height="9" rx="3"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>';
 // ==================== БЕРЕЖНОЕ ПРОХОЖДЕНИЕ И ВИЗУАЛЬНАЯ СВОДКА ====================
-function franklQuote(){return `<figure class="frankl-quote glass"><span class="quote-light" aria-hidden="true"></span><span class="quote-mark" aria-hidden="true">“</span><svg class="quote-branch" viewBox="0 0 140 220" aria-hidden="true"><path d="M34 210C53 173 68 133 77 88S91 38 112 15" fill="none" stroke="#4E8F6B" stroke-width="2" stroke-linecap="round"/><g class="quote-twig"><path d="M70 121C40 121 21 103 24 76c30 3 49 19 46 45Z" fill="#A9CDB4"/><path d="M70 121 34 87" fill="none" stroke="#4E8F6B" stroke-width="1"/></g><g class="quote-twig twig-two"><path d="M79 91C80 62 103 48 128 52c-3 24-21 42-49 39Z" fill="#4E8F6B"/><path d="M79 91 117 61" fill="none" stroke="#D1E5CF" stroke-width="1"/></g><g class="quote-twig twig-three"><path d="M47 177C22 174 8 153 14 132c27 6 41 22 33 45Z" fill="#4E8F6B"/><path d="M47 177 21 143" fill="none" stroke="#D1E5CF" stroke-width="1"/></g><path d="M101 31C88 16 94 3 114 1c4 13 1 24-13 30Z" fill="#A9CDB4"/><path d="M58 151c21-25 44-23 60-10-16 21-39 25-60 10Z" fill="#1F5A43"/><path d="m61 151 46-8" fill="none" stroke="#A9CDB4" stroke-width="1"/></svg><blockquote><p>«Когда мы не можем изменить ситуацию, <span class="quote-emphasis">мы вынуждены изменить себя</span>».</p></blockquote><figcaption>Виктор Франкл</figcaption><p class="quote-caption">Бережность к себе начинается с внимания.</p></figure>`}
+function LiquidLightQuote(){return `<figure class="liquid-light-quote"><span class="edge-light" aria-hidden="true"></span><span class="opening-quote" aria-hidden="true">“</span><blockquote><p>Когда мы не можем изменить ситуацию, мы вынуждены изменить себя.</p></blockquote><figcaption>ВИКТОР ФРАНКЛ</figcaption></figure>`;}
 function careInformation(){return `<details class="important glass"><summary>Важно знать перед началом</summary><p>Пять коротких опросников помогут описать ваше самочувствие с разных сторон. Отвечайте так, как ощущаете: здесь важен ваш опыт, а не «правильный» ответ.</p><dl class="scale-guide"><div><dt>HADS</dt><dd>Тревога и настроение за последнюю неделю.</dd></div><div><dt>AQ-10</dt><dd>Особенности общения, восприятия и привычного поведения.</dd></div><div><dt>ASRS-5</dt><dd>Внимание, организация дел и активность за последние шесть месяцев.</dd></div><div><dt>BIS-brief</dt><dd>Привычный темп решений и склонность действовать импульсивно.</dd></div><div><dt>HCL-8</dt><dd>Периоды необычного подъёма настроения и активности в прошлом.</dd></div></dl><p>Это скрининг для взрослых от 18 лет. Он помогает обозначить темы для разговора; диагноз устанавливает врач в клинической беседе. Возможности каждого опросника зависят от его версии и условий применения.</p><p>Можно делать паузы, возвращаться к ответам и на главный экран. Ответы сохранятся в этой вкладке до её закрытия или обновления. Поделиться результатами можно по собственному решению.</p></details>`}
 function comparisonData(rows){return rows.map(r=>{const span=r.max-r.min;const fraction=r.available&&span>0?Math.max(0,Math.min(1,(r.total-r.min)/span)):0;const threshold=r.scale==='HADS'?8:r.scale==='AQ-10'?6:r.scale==='HCL-8'?9.3:null;return {...r,fraction,thresholdFraction:threshold===null?null:(threshold-r.min)/span}})}
 function scoreComparison(rows){return `<section class="score-comparison glass" aria-labelledby="comparison-title"><div class="eyebrow">Общая картина</div><h3 id="comparison-title">Ваши баллы на одном графике</h3><p class="comparison-note">У каждой шкалы свой диапазон. Длина полосы показывает положение внутри этого диапазона; баллы разных шкал не складываются и не сравниваются напрямую.</p><ol class="comparison-list">${comparisonData(rows).map(r=>`<li class="comparison-row ${r.high?'warm':''}"><div class="comparison-heading"><span><strong>${esc(r.scale)}</strong>${r.scale==='HADS'?`<small>${esc(r.title)}</small>`:''}</span><b>${r.available?formatScore(r.total):'—'} <small>/ ${formatScore(r.max)}</small></b></div><div class="comparison-rail" aria-hidden="true"><span class="comparison-fill" style="--score:${r.fraction}"></span>${r.thresholdFraction===null?'':`<i class="comparison-threshold" style="left:${r.thresholdFraction*100}%"></i>`}</div><div class="comparison-range"><span>${formatScore(r.min)}</span><span>${r.thresholdFraction===null?'Без пороговой оценки':r.high?'Есть тема для обсуждения с врачом':'Ниже скринингового порога'}</span><span>${formatScore(r.max)}</span></div></li>`).join('')}</ol><p class="comparison-legend"><span aria-hidden="true">│</span> Отметка — скрининговый порог там, где он применяется.</p></section>`}
@@ -2040,7 +2072,7 @@ function results(){return [...scoreHADS(state.answers.hads),scoreAQ10(state.answ
 function answeredCount(){return Object.values(state.answers).flat().filter(Number.isInteger).length}
 function demoNotice(){return isDemo()?'<div class="notice"><strong>Предпросмотр интерфейса.</strong> Вопросы содержат явные заглушки. До добавления официальных бланков и ключей клинические результаты не рассчитываются.</div>':''}
 // ==================== РЕНДЕР ====================
-function welcome(){return `<section class="screen" aria-labelledby="screen-title"><div class="entry-room"><div class="entry-photo" role="img" aria-label="Монстера в каменном горшке у известковой стены в утреннем солнце"></div><div class="welcome"><div class="welcome-copy"><div class="eyebrow">В своём ритме</div><h1 id="screen-title" tabindex="-1"><span class="word"><span style="--i:0">Время</span></span> <span class="word"><span style="--i:1">прислушаться</span></span><br><span class="word"><span style="--i:2"><em>к себе.</em></span></span></h1><p class="intro muted">Несколько простых опросников, чтобы лучше понять своё состояние и подготовиться к разговору с врачом.</p><p class="meta">5 опросников · ${totalQuestions} вопросов · В своём ритме</p><ul class="garden-chips" aria-label="Об опросниках"><li class="garden-chip chip-private"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 2 3.5 5v4.5c0 4 3.4 6.8 6.5 8 3.1-1.2 6.5-4 6.5-8V5L10 2Z"/><path d="m7 9.5 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>Анонимно</li><li class="garden-chip chip-time"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="7"/><path d="M10 5.5V10l3 2" stroke-linecap="round"/></svg>10–15 минут</li><li class="garden-chip chip-open"><span class="chip-dot" aria-hidden="true"></span>Без регистрации</li></ul><button class="button primary magnetic" data-action="start">${state.completedAt?'Посмотреть результаты':state.resume?'Продолжить заполнение':'Начать'} ${arrow}</button>${state.resume&&!state.completedAt?`<p class="resume-note">Заполнено ${answeredCount()} из ${totalQuestions}. Ваши ответы сохранены в этой вкладке.</p>`:''}<div class="private">${lock} Ответы остаются только в этой вкладке.</div></div></div>${franklQuote()}</div>${careInformation()}${demoNotice()}</section>`}
+function welcome(){return `<section class="screen" aria-labelledby="screen-title"><div class="entry-room"><div class="entry-photo" role="img" aria-label="Монстера в каменном горшке у известковой стены в утреннем солнце"></div><div class="welcome"><div class="welcome-copy"><div class="eyebrow">В своём ритме</div><h1 id="screen-title" tabindex="-1"><span class="word"><span style="--i:0">Время</span></span> <span class="word"><span style="--i:1">прислушаться</span></span><br><span class="word"><span style="--i:2"><em>к себе.</em></span></span></h1><p class="intro muted">Несколько простых опросников, чтобы лучше понять своё состояние и подготовиться к разговору с врачом.</p><p class="meta">5 опросников · ${totalQuestions} вопросов · В своём ритме</p><ul class="garden-chips" aria-label="Об опросниках"><li class="garden-chip chip-private"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 2 3.5 5v4.5c0 4 3.4 6.8 6.5 8 3.1-1.2 6.5-4 6.5-8V5L10 2Z"/><path d="m7 9.5 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>Анонимно</li><li class="garden-chip chip-time"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="10" cy="10" r="7"/><path d="M10 5.5V10l3 2" stroke-linecap="round"/></svg>10–15 минут</li><li class="garden-chip chip-open"><span class="chip-dot" aria-hidden="true"></span>Без регистрации</li></ul><button class="button primary magnetic" data-action="start">${state.completedAt?'Посмотреть результаты':state.resume?'Продолжить заполнение':'Начать'} ${arrow}</button>${state.resume&&!state.completedAt?`<p class="resume-note">Заполнено ${answeredCount()} из ${totalQuestions}. Ваши ответы сохранены в этой вкладке.</p>`:''}<div class="private">${lock} Ответы остаются только в этой вкладке.</div></div></div>${LiquidLightQuote()}</div>${careInformation()}${demoNotice()}</section>`}
 
 function breath(){const q=scales[state.scale];return `<section class="screen" aria-labelledby="screen-title">${progress()}<div class="breath glass">${botanical(q.id)}<div class="eyebrow">Пауза · ${state.scale+1} из ${scales.length} · ${esc(q.name)}</div><h2 id="screen-title" tabindex="-1">${esc(q.title)}</h2><p class="breath-description">${esc(q.description)}</p><p class="instruction">${esc(wording(q.instruction))}</p>${readiness(q)?'<div class="notice">В этом разделе ещё не добавлен подтверждённый бланк. Можно проверить навигацию; баллы по заглушкам не рассчитываются.</div>':''}<p class="muted" style="font-size:11px">${q.questions.length} вопросов · Можно вернуться к любому ответу</p><div class="navigation"><button class="text-button" data-action="back"><span>← Назад</span></button><button class="button primary" data-action="continue">Продолжить ${arrow}</button></div></div></section>`}
 function question(itemIndex=state.item){const q=scales[state.scale],item=q.questions[itemIndex],selected=state.answers[q.id][itemIndex];return `<section class="screen" aria-labelledby="screen-title">${progress()}<div class="question glass ${Number.isInteger(selected)?'has-answer':''}"><div class="question-content"><div class="eyebrow"><span>${esc(q.name)}</span><span>Вопрос ${itemIndex+1} из ${q.questions.length}</span></div>${readiness(q)?'<span class="demo-tag">ПРЕДПРОСМОТР · ТЕКСТ ТРЕБУЕТ ПРОВЕРКИ</span>':''}<h2 id="screen-title" tabindex="-1">${esc(wording(item.text))}</h2><p class="question-context">${esc(q.id==='hads'?'За последнюю неделю':q.id==='asrs5'?'За последние 6 месяцев':q.id==='hcl8'?'Один и тот же период необычного подъёма в прошлом':'Ориентируйтесь на то, что обычно для вас')}</p><div class="answers" role="radiogroup" aria-labelledby="screen-title" aria-describedby="answer-hint">${item.options.map((o,i)=>`<button type="button" class="answer" style="--i:${i}" role="radio" aria-checked="${selected===i}" tabindex="${selected===i||(selected===null&&i===0)?0:-1}" data-answer="${i}"><span class="radio"><svg aria-hidden="true" viewBox="0 0 16 16"><path d="m3 8 3 3 7-7"/></svg></span><span class="answer-text">${esc(wording(o.label))}</span><span class="key" aria-hidden="true">${i+1}</span></button>`).join('')}</div><p class="hint" id="answer-hint" aria-live="polite"></p><div class="navigation"><button class="text-button" data-action="back"><span>← Назад</span></button><button class="button primary next" data-action="next">${state.scale===scales.length-1&&itemIndex===q.questions.length-1?'К результатам':'Далее'} ${arrow}</button></div></div></div></section>`}
@@ -2355,7 +2387,7 @@ function createConservatory() {
   }):null;
   const vertex=`
     attribute vec2 position;
-    uniform vec4 crop, fields[3];
+    uniform mediump vec4 crop; uniform vec4 fields[3];
     uniform vec2 anchors[3];
     uniform vec3 wind;
     uniform float viewpoint;
@@ -2377,12 +2409,24 @@ function createConservatory() {
   const fragment=`
     precision mediump float;
     uniform sampler2D plate, exposure;
+    uniform vec4 crop,lens;
+    uniform vec2 surface;
     uniform vec3 lighting;
     uniform vec2 shadowDrift;
     uniform float strength;
     varying mediump vec2 uv,leafUV;
     void main(){
-      vec3 colour=texture2D(plate,leafUV).rgb;
+      vec2 samplePoint=leafUV;
+      if(lens.z>0.0){
+        vec2 point=(uv-crop.zw)/crop.xy*surface-lens.xy-lens.zw*.5;
+        vec2 corner=abs(point)-lens.zw*.5+26.0;
+        float depth=26.0-length(max(corner,0.0))-min(max(corner.x,corner.y),0.0);
+        if(depth>0.0 && depth<7.0){
+          vec2 normal=normalize(max(corner,.001))*sign(point);
+          samplePoint+=normal*(4.2*sin(depth*.449))*crop.xy/surface;
+        }
+      }
+      vec3 colour=texture2D(plate,samplePoint).rgb;
       vec3 rest=texture2D(exposure,uv).rgb;
       // Экспозиция, полутень и каустика извлечены из одного источника света.
       float shade=texture2D(exposure,uv+shadowDrift).r-rest.r;
@@ -2405,7 +2449,7 @@ function createConservatory() {
     }
     gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error('program');
     gl.useProgram(program);
-    uniforms=Object.fromEntries(['crop','fields[0]','anchors[0]','wind','viewpoint','strength','lighting','shadowDrift','plate','exposure'].map(k=>[k,gl.getUniformLocation(program,k)]));
+    uniforms=Object.fromEntries(['crop','fields[0]','anchors[0]','wind','viewpoint','strength','lighting','shadowDrift','surface','lens','plate','exposure'].map(k=>[k,gl.getUniformLocation(program,k)]));
     const vertices=[],indices=[],nx=72,ny=46;
     for(let y=0;y<=ny;y++)for(let x=0;x<=nx;x++)vertices.push(x/nx,y/ny);
     for(let y=0;y<ny;y++)for(let x=0;x<nx;x++){const i=y*(nx+1)+x;indices.push(i,i+1,i+nx+1,i+1,i+nx+2,i+nx+1);}
@@ -2423,6 +2467,7 @@ function createConservatory() {
     for(const [option,value] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]])gl.texParameteri(gl.TEXTURE_2D,option,value);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,img);
   }
+  let quoteEdge=null,lastEdgeUpdate=-1;
   function measure(){
     if(!host||!loaded)return;
     const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;
@@ -2431,7 +2476,13 @@ function createConservatory() {
     gl.viewport(0,0,canvas.width,canvas.height);
     const sx=Math.min(1,w/(h*aspect)),sy=Math.min(1,h*aspect/w);
     const position=room===rooms.entry?[.95,.87]:room===rooms.daylight&&innerWidth<=760?[.53,.5]:[.5,.5];
-    crop=[sx,sy,(1-sx)*position[0],(1-sy)*position[1]];schedule();
+    crop=[sx,sy,(1-sx)*position[0],(1-sy)*position[1]];
+    const quote=room===rooms.entry&&host.parentElement.querySelector('.liquid-light-quote');
+    quoteEdge=quote?quote.querySelector('.edge-light'):null;
+    const rect=quote&&quote.getBoundingClientRect(),photo=host.getBoundingClientRect();
+    // Координаты линзы в пикселях спроецированного кадра; за кромкой кадр исходный.
+    gl.uniform4f(uniforms.lens,rect?rect.left-photo.left:0,rect?rect.top-photo.top:0,rect?rect.width:0,rect?rect.height:0);
+    gl.uniform2f(uniforms.surface,w,h);schedule();
   }
   function stop(){clearTimeout(timer);cancelAnimationFrame(frame);frame=timer=previous=0;}
   function active(){return loaded&&observing&&!broken&&!reduce()&&!document.hidden;}
@@ -2450,6 +2501,11 @@ function createConservatory() {
     gl.uniform1f(uniforms.viewpoint,viewpoint*strength);gl.uniform1f(uniforms.strength,strength);
     // Один ветер управляет и пластикой листа, и его проекцией на стену.
     if(room===rooms.entry){
+      if(quoteEdge && (now-lastEdgeUpdate>120 || lastEdgeUpdate<0)){
+        lastEdgeUpdate=now;
+        quoteEdge.style.backgroundPosition=(50+41*far).toFixed(1)+'% 50%';
+        quoteEdge.style.opacity=(.77+.15*far+.06*middle).toFixed(3);
+      }
       gl.uniform3f(uniforms.lighting,.65*middle+.35*far,.72*near+.28*middle,.55*middle+.45*near);
     }else{
       gl.uniform3f(uniforms.lighting,wave(37,.8),wave(31,-.5),wave(22.5,.24));
